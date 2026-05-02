@@ -1417,7 +1417,10 @@ nav {
         <img src="https://flagcdn.com/w40/cz.png" alt="CZ" onclick="if(lang!=='cs'){toggleLang();toggleSettingsMenu();}" style="width:28px;height:20px;border-radius:3px;cursor:pointer;opacity:1;object-fit:cover">
         <img src="https://flagcdn.com/w40/gb.png" alt="EN" onclick="if(lang!=='en'){toggleLang();toggleSettingsMenu();}" style="width:28px;height:20px;border-radius:3px;cursor:pointer;opacity:1;object-fit:cover">
       </div>
-      <div class="dropdown-item" onclick="toggleTheme();toggleSettingsMenu()"><span id="dd-theme-icon">🌙</span> <span id="dd-theme" data-cs="Noční režim" data-en="Dark mode">Noční režim</span></div>
+      <div class="dropdown-item" style="display:flex;align-items:center;gap:8px;padding:8px 14px">
+        <span id="dd-theme-light" onclick="if(theme!=='light'){setTheme('light');toggleSettingsMenu();}" style="font-size:1.35rem;cursor:pointer;opacity:1;line-height:1;transition:opacity .2s" title="Světlý režim / Light mode">☀️</span>
+        <span id="dd-theme-dark" onclick="if(theme!=='dark'){setTheme('dark');toggleSettingsMenu();}" style="font-size:1.35rem;cursor:pointer;opacity:0.4;line-height:1;transition:opacity .2s" title="Noční režim / Dark mode">🌙</span>
+      </div>
       <div class="dropdown-sep"></div>
       <div class="dropdown-item" id="dd-settings-row" onclick="showPage('settings');toggleSettingsMenu()" data-cs="⚙️ Nastavení účtu" data-en="⚙️ Account settings" style="display:none">⚙️ Nastavení účtu</div>
       <div class="dropdown-item" onclick="showPage('contact');toggleSettingsMenu()" data-cs="✉️ Kontakt" data-en="✉️ Contact">✉️ Kontakt</div>
@@ -3625,17 +3628,18 @@ document.addEventListener('click', (e) => {
 });
 
 function updateSettingsMenu() {
-  if (!document.getElementById('dd-theme')) return;
-  const themeBtn = document.getElementById('dd-theme');
+  if (!document.getElementById('dd-theme-light')) return;
   const langBtn = document.getElementById('dd-lang');
   const signoutRow = document.getElementById('dd-signout-row');
   const signinRow = document.getElementById('dd-signin-row');
   const userRow = document.getElementById('settings-user-row');
   const isDark = document.documentElement.getAttribute('data-theme') !== 'light';
 
-  if (themeBtn) themeBtn.innerHTML = isDark ? (lang==='en' ? 'Light mode' : 'Světlý režim') : (lang==='en' ? 'Dark mode' : 'Noční režim');
-  const themeIcon = document.getElementById('dd-theme-icon');
-  if (themeIcon) themeIcon.textContent = isDark ? '☀️' : '🌙';
+  // Highlight active theme icon
+  const lightIcon = document.getElementById('dd-theme-light');
+  const darkIcon = document.getElementById('dd-theme-dark');
+  if (lightIcon) lightIcon.style.opacity = isDark ? '0.4' : '1';
+  if (darkIcon) darkIcon.style.opacity = isDark ? '1' : '0.4';
   // Highlight active language flag
   const czFlag = document.querySelector('[alt="CZ"]');
   const enFlag = document.querySelector('[alt="EN"]');
@@ -4670,6 +4674,12 @@ function applyTheme() {
 }
 function toggleTheme() {
   theme = theme==='dark'?'light':'dark';
+  localStorage.setItem('how_theme', theme);
+  applyTheme();
+  updateSettingsMenu();
+}
+function setTheme(mode) {
+  theme = mode;
   localStorage.setItem('how_theme', theme);
   applyTheme();
   updateSettingsMenu();
