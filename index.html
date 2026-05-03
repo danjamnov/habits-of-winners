@@ -91,7 +91,7 @@
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
+html { scroll-behavior: auto; }
 body {
   font-family: 'Outfit', sans-serif;
   background: var(--bg);
@@ -151,15 +151,6 @@ nav {
 .page { display: none; padding-top: 60px; min-height: 100vh; }
 .page.active { display: block; animation: pageIn 0.35s ease; }
 @keyframes pageIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
-/* ── Nepřihlášení: všechny hlavní sekce viditelné, scrollovatelné ── */
-html:not(.logged-in) #page-home,
-html:not(.logged-in) #page-habits,
-html:not(.logged-in) #page-challenges,
-html:not(.logged-in) #page-friends { display: block !important; min-height: unset; }
-html:not(.logged-in) #page-home { padding-top: 60px; min-height: 100vh; }
-html:not(.logged-in) #page-habits,
-html:not(.logged-in) #page-challenges,
-html:not(.logged-in) #page-friends { padding-top: 40px; padding-bottom: 40px; border-top: 1px solid var(--border); }
 
 /* ══════════════════════════════════════════
    HOME PAGE
@@ -3862,7 +3853,7 @@ function resetAppState() {
   renderHabits();
   renderDailyChallenges();
   updateSettingsMenu();
-  showPage('habits');
+  // showPage se nevolá tady — při odhlášení ho volá signOut(), při načtení ho nechceme
 }
 
 function checkAndResetStreak() {
@@ -5193,10 +5184,8 @@ function hideCookieBanner() {
 // ════════════════════════════════════════════
 function showPage(id) {
   updateHeroVisibility();
-  if (isLoggedIn()) {
-    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-    document.getElementById('page-' + id).classList.add('active');
-  }
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
   document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
   const tabEl = document.getElementById('tab-' + id);
   if(tabEl) tabEl.classList.add('active');
@@ -5222,18 +5211,7 @@ function showPage(id) {
   }
   if(id==='settings') loadSettings();
   document.getElementById('user-dropdown')?.classList.remove('open');
-  if (isLoggedIn()) {
-    window.scrollTo(0, 0);
-  } else {
-    // Nepřihlášený: všechny sekce jsou viditelné — scroll na správnou
-    const pageEl = document.getElementById('page-' + id);
-    if (pageEl) {
-      setTimeout(() => {
-        const top = pageEl.getBoundingClientRect().top + window.scrollY - 64;
-        window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
-      }, 30);
-    }
-  }
+  window.scrollTo(0, 0);
 }
 
 // ════════════════════════════════════════════
