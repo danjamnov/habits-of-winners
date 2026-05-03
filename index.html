@@ -2454,8 +2454,9 @@ html.logged-in .hero-section { display: none; }
         <span data-en style="display:none"><strong style="color:var(--text)">How to find Chat ID:</strong><br>
         Open Telegram ➡️ New message ➡️ Search <strong>@userinfobot</strong> (User Info · Get ID · idbot) ➡️ in its chat tap <strong>Start</strong></span>
       </div>
-      <div class="settings-connected" id="tg-connected">
-        ✅ <span id="tg-connected-text" data-cs="Telegram propojený" data-en="Telegram connected">Telegram propojený</span>
+      <div class="settings-connected" id="tg-connected" style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap">
+        <span>✅ <span id="tg-connected-text" data-cs="Telegram propojený" data-en="Telegram connected">Telegram propojený</span></span>
+        <button onclick="disconnectTelegram()" style="background:none;border:1px solid var(--text-muted);border-radius:6px;padding:3px 10px;font-size:0.78rem;color:var(--text-muted);cursor:pointer" data-cs="Odpojit" data-en="Disconnect">Odpojit</button>
       </div>
 
       <!-- Nastavení oznámení – zobrazí se jen po propojení Telegramu -->
@@ -4365,6 +4366,36 @@ async function loadSettings() {
   loadProfileSettings();
 }
 
+async function disconnectTelegram() {
+  if (!isLoggedIn()) return;
+  // Smaž z localStorage
+  localStorage.removeItem('how_tg_id');
+  localStorage.removeItem('how_notif-morning-switch');
+  localStorage.removeItem('how_notif-evening-switch');
+  localStorage.removeItem('how_notif_challenge');
+  localStorage.removeItem('how_notif_checkin');
+  // Smaž z Supabase user_metadata (explicitně null aby se opravdu smazalo)
+  try {
+    await supa.auth.updateUser({ data: { tg_id: null, notif_morn: null, notif_eve: null } });
+  } catch(e) { console.warn('disconnectTelegram meta error:', e.message); }
+  // Smaž z telegram_users tabulky
+  if (currentUser) {
+    try {
+      await supa.from('telegram_users').delete().eq('user_id', currentUser.id);
+    } catch(e) { console.warn('disconnectTelegram db error:', e.message); }
+  }
+  // Reset UI
+  const tgInput = document.getElementById('tg-chat-id-input');
+  if (tgInput) tgInput.value = '';
+  const tgConn = document.getElementById('tg-connected');
+  if (tgConn) tgConn.classList.remove('show');
+  const notifEl = document.getElementById('tg-notif-settings');
+  if (notifEl) notifEl.style.display = 'none';
+  const helpEl = document.getElementById('tg-chatid-help');
+  if (helpEl) helpEl.style.display = '';
+  showToast('Telegram odpojen ✓');
+}
+
 async function saveTelegramId() {
   if (!isLoggedIn()) return requireAuth(
     'Propoj Telegram – přihlas se nejdřív',
@@ -4765,8 +4796,10 @@ async function saveSettingsToMeta() {
     notif_morn:  localStorage.getItem('how_notif-morning-switch') || null,
     notif_eve:   localStorage.getItem('how_notif-evening-switch') || null,
   };
-  // Odstraň null hodnoty – nechceme přepisovat existující
-  Object.keys(meta).forEach(k => { if (meta[k] === null) delete meta[k]; });
+  // Odstraň null jen pro non-critical pole (avatar, age, gender, difficulty, time_pref)
+  // tg_id a notif se posílají vždy (i null) aby Supabase správně smazal staré hodnoty
+  const nonCritical = ['avatar','age','gender','difficulty','time_pref'];
+  nonCritical.forEach(k => { if (meta[k] === null) delete meta[k]; });
   try {
     const { data, error } = await supa.auth.updateUser({ data: meta });
     if (error) { console.warn('saveSettingsToMeta error:', error.message); return; }
@@ -4782,12 +4815,20 @@ function applySettingsFromMeta() {
   if (m.avatar)      localStorage.setItem('how_avatar', m.avatar);
   else               localStorage.removeItem('how_avatar');
   if (m.age)         localStorage.setItem('how_age', m.age);
+  else               localStorage.removeItem('how_age');
   if (m.gender)      localStorage.setItem('how_profile-gender', m.gender);
+  else               localStorage.removeItem('how_profile-gender');
   if (m.difficulty)  localStorage.setItem('how_profile-difficulty', m.difficulty);
+  else               localStorage.removeItem('how_profile-difficulty');
   if (m.time_pref)   localStorage.setItem('how_profile-time', m.time_pref);
+  else               localStorage.removeItem('how_profile-time');
+  // SECURITY: vždy explicitně nastav/smaž tg_id – nikdy nenechávej cizí ID v localStorage
   if (m.tg_id)       localStorage.setItem('how_tg_id', m.tg_id);
+  else               localStorage.removeItem('how_tg_id');
   if (m.notif_morn)  localStorage.setItem('how_notif-morning-switch', m.notif_morn);
+  else               localStorage.removeItem('how_notif-morning-switch');
   if (m.notif_eve)   localStorage.setItem('how_notif-evening-switch', m.notif_eve);
+  else               localStorage.removeItem('how_notif-evening-switch');
 }
 
 async function syncProfileToSupabase() {
