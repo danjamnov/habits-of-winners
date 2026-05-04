@@ -2104,6 +2104,75 @@ html.logged-in #tab-progress { display: inline-flex; }
   gap: 6px;
 }
 
+/* ══════════════════════════════════════════
+   SBĚRATELSKÉ KARTY NÁVYKŮ
+══════════════════════════════════════════ */
+.cards-section-wrap { margin-top: 24px; }
+.cards-section-head { display:flex;align-items:center;justify-content:space-between;margin-bottom:12px; }
+.cards-section-title { font-size:0.88rem;font-weight:700;color:var(--text);display:flex;align-items:center;gap:7px; }
+.cards-open-all { font-size:0.72rem;color:var(--gold);font-weight:600;background:var(--gold-bg);border:none;cursor:pointer;padding:4px 8px;border-radius:6px; }
+.cards-preview-row { display:flex;gap:10px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none; }
+.cards-preview-row::-webkit-scrollbar { display:none; }
+.cards-empty { font-size:0.78rem;color:var(--text-muted);padding:12px 0;text-align:center;background:var(--surface);border-radius:10px; }
+.hcard { flex-shrink:0;width:108px;border-radius:11px;padding:10px 8px 9px;display:flex;flex-direction:column;align-items:center;position:relative;overflow:hidden;cursor:pointer;transition:transform .18s,box-shadow .18s;user-select:none; }
+.hcard:hover { transform:translateY(-4px) scale(1.04); }
+.hcard.locked { filter:grayscale(1);opacity:0.22;cursor:default; }
+.hcard.locked:hover { transform:none; }
+.hcard.common   { background:linear-gradient(160deg,#2a2a2a,#1c1c1c);border:1px solid #555; }
+.hcard.uncommon { background:linear-gradient(160deg,#0a2216,#122b1e);border:1px solid #22c55e;box-shadow:0 0 10px rgba(34,197,94,.18); }
+.hcard.rare     { background:linear-gradient(160deg,#0a1628,#0f1e3c);border:1px solid #3b82f6;box-shadow:0 0 12px rgba(59,130,246,.22); }
+.hcard.epic     { background:linear-gradient(160deg,#160a28,#20123c);border:1px solid #a855f7;box-shadow:0 0 14px rgba(168,85,247,.28); }
+.hcard.legendary{ background:linear-gradient(160deg,#271400,#3a2000);border:2px solid #f59e0b;box-shadow:0 0 18px rgba(245,158,11,.38),inset 0 0 30px rgba(245,158,11,.06); }
+.hcard.legendary::after { content:'';position:absolute;inset:0;background:linear-gradient(105deg,transparent 40%,rgba(255,220,80,.08) 50%,transparent 60%);background-size:200% 100%;animation:holo 3s linear infinite;pointer-events:none; }
+@keyframes holo { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+.hcard-rarity { font-size:.55rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;margin-bottom:7px;width:100%;text-align:center;opacity:.85; }
+.hcard.common .hcard-rarity    { color:#aaa; }
+.hcard.uncommon .hcard-rarity  { color:#22c55e; }
+.hcard.rare .hcard-rarity      { color:#60a5fa; }
+.hcard.epic .hcard-rarity      { color:#c084fc; }
+.hcard.legendary .hcard-rarity { color:#fbbf24; }
+.hcard-art { font-size:2rem;line-height:1;margin-bottom:5px;text-align:center;text-shadow:0 2px 8px rgba(0,0,0,.5); }
+.hcard-art .sub-emoji { font-size:1rem;display:block;margin-top:-4px;text-align:center; }
+.hcard-divider { width:80%;height:1px;margin:4px 0;opacity:.25; }
+.hcard.common .hcard-divider    { background:#aaa; }
+.hcard.uncommon .hcard-divider  { background:#22c55e; }
+.hcard.rare .hcard-divider      { background:#60a5fa; }
+.hcard.epic .hcard-divider      { background:#c084fc; }
+.hcard.legendary .hcard-divider { background:#fbbf24; }
+.hcard-name   { font-size:.62rem;font-weight:700;color:#fff;text-align:center;line-height:1.3;margin-bottom:3px; }
+.hcard-flavor { font-size:.52rem;color:rgba(255,255,255,.45);text-align:center;font-style:italic;line-height:1.35;margin-bottom:4px; }
+.hcard-meta   { font-size:.5rem;color:rgba(255,255,255,.35);text-align:center;margin-top:auto; }
+.hcard-date   { font-weight:600;color:rgba(255,255,255,.5); }
+.cards-modal-overlay { position:fixed;inset:0;z-index:2000;background:rgba(0,0,0,.88);display:flex;flex-direction:column;animation:fadeIn .2s ease; }
+.cards-modal-inner   { display:flex;flex-direction:column;height:100%;max-height:100dvh;overflow:hidden; }
+.cards-modal-header  { padding:16px 16px 12px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,.08);flex-shrink:0; }
+.cards-modal-title   { font-size:1rem;font-weight:700;color:#fff;display:flex;align-items:center;gap:8px; }
+.cards-modal-count   { font-size:.72rem;color:rgba(255,255,255,.45);background:rgba(255,255,255,.08);border-radius:20px;padding:2px 9px; }
+.cards-modal-close   { background:rgba(255,255,255,.1);border:none;color:#fff;border-radius:50%;width:32px;height:32px;font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center; }
+.cards-modal-filters { display:flex;gap:6px;padding:10px 16px;overflow-x:auto;scrollbar-width:none;flex-shrink:0; }
+.cards-modal-filters::-webkit-scrollbar { display:none; }
+.cfilter { flex-shrink:0;padding:5px 12px;border-radius:20px;font-size:.72rem;font-weight:600;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.6);cursor:pointer;transition:all .15s; }
+.cfilter.active { background:rgba(245,158,11,.2);border-color:#f59e0b;color:#fbbf24; }
+.cards-modal-grid { flex:1;overflow-y:auto;padding:12px 16px 24px;display:grid;grid-template-columns:repeat(3,1fr);gap:10px; }
+.cards-modal-grid .hcard { width:100%; }
+.card-detail-overlay { position:fixed;inset:0;z-index:2100;background:rgba(0,0,0,.92);display:flex;align-items:center;justify-content:center;padding:20px;animation:fadeIn .18s ease; }
+.card-detail-inner   { display:flex;flex-direction:column;align-items:center;gap:16px;max-width:320px;width:100%; }
+.card-detail-large   { width:180px !important;cursor:default !important; }
+.card-detail-large:hover { transform:none !important; }
+.card-detail-large .hcard-art  { font-size:3.2rem;margin-bottom:8px; }
+.card-detail-large .hcard-name { font-size:.82rem; }
+.card-detail-large .hcard-flavor { font-size:.68rem; }
+.card-detail-large .hcard-meta { font-size:.62rem; }
+.card-detail-btns { display:flex;gap:10px;width:100%; }
+.card-detail-btn  { flex:1;padding:11px;border-radius:9px;border:none;font-weight:700;font-size:.82rem;cursor:pointer;transition:opacity .15s; }
+.card-detail-btn.share     { background:#f59e0b;color:#000; }
+.card-detail-btn.close-btn { background:rgba(255,255,255,.1);color:#fff; }
+.card-detail-btn:hover { opacity:.85; }
+.card-detail-stat  { font-size:.72rem;color:rgba(255,255,255,.5);text-align:center;line-height:1.6; }
+.card-drop-toast   { position:fixed;bottom:90px;left:50%;transform:translateX(-50%);z-index:3000;pointer-events:none;display:flex;flex-direction:column;align-items:center;gap:6px;animation:cardDropIn .4s cubic-bezier(.34,1.56,.64,1); }
+@keyframes cardDropIn { from{opacity:0;transform:translateX(-50%) translateY(30px) scale(.8)} to{opacity:1;transform:translateX(-50%) translateY(0) scale(1)} }
+.card-drop-label { background:rgba(245,158,11,.95);color:#000;font-size:.72rem;font-weight:800;letter-spacing:.06em;padding:4px 14px;border-radius:20px;text-transform:uppercase; }
+
 /* Hlasovací sekce */
 .vote-section {
   margin-top: 28px;
@@ -3429,6 +3498,17 @@ html.logged-in .hero-v2 { display: none; }
 
     <div class="progress-section-title">Odznaky</div>
     <div class="progress-badges" id="progress-badges"></div>
+
+    <!-- Sběratelské karty -->
+    <div class="cards-section-wrap" id="cards-section-wrap">
+      <div class="cards-section-head">
+        <div class="cards-section-title">🃏 Sběratelské karty</div>
+        <button class="cards-open-all" onclick="openCardsModal()">Celá sbírka →</button>
+      </div>
+      <div id="cards-preview-wrap">
+        <div class="cards-empty">Splň 7denní streak a získej první kartu!</div>
+      </div>
+    </div>
 
     <div class="progress-share-box">
       <div class="progress-share-title">📣 Sdílet svůj pokrok</div>
@@ -7151,6 +7231,194 @@ async function loadBossParticipants(year, month) {
 }
 
 // ════════════════════════════════════════════
+//  SBĚRATELSKÉ KARTY — logika
+// ════════════════════════════════════════════
+function getCardState() {
+  const now = new Date();
+  const year = now.getFullYear();
+  const bossBadges = BOSS_FIGHTS.filter(bf =>
+    localStorage.getItem(`boss_badge_${year}_${bf.m}`) ||
+    localStorage.getItem(`boss_badge_${year-1}_${bf.m}`)
+  ).length;
+  const commBadges = Array.from({length:12},(_,i)=>i+1)
+    .filter(m => localStorage.getItem(`how_comm_join_${year}_${m}`) || localStorage.getItem(`how_comm_join_${year-1}_${m}`))
+    .length;
+  return { done: completed.length, streak, habitStreak, bossBadges, commBadges };
+}
+
+function loadEarnedCards() {
+  try { return JSON.parse(localStorage.getItem('how_cards') || '[]'); } catch(e) { return []; }
+}
+
+function saveEarnedCards(cards) {
+  localStorage.setItem('how_cards', JSON.stringify(cards));
+}
+
+function checkAndAwardCards() {
+  if (!isLoggedIn()) return [];
+  const state = getCardState();
+  const earned = loadEarnedCards();
+  const earnedIds = new Set(earned.map(e => e.id));
+  const newCards = [];
+  for (const card of HABIT_CARDS) {
+    if (!earnedIds.has(card.id) && card.req(state)) {
+      earned.push({ id: card.id, date: new Date().toISOString().slice(0,10) });
+      newCards.push(card);
+    }
+  }
+  if (newCards.length > 0) {
+    saveEarnedCards(earned);
+    if (isLoggedIn()) {
+      supa.from('profiles').select('settings').eq('id', currentUser.id).single().then(({data:profile}) => {
+        const settings = {...(profile?.settings||{}), how_cards: JSON.stringify(earned)};
+        supa.from('profiles').upsert({id:currentUser.id,settings,updated_at:new Date().toISOString()},{onConflict:'id'}).catch(()=>{});
+      });
+    }
+    newCards.forEach((card, i) => setTimeout(() => showCardDrop(card), i * 1800));
+  }
+  return newCards;
+}
+
+function showCardDrop(card) {
+  const old = document.getElementById('card-drop-toast');
+  if (old) old.remove();
+  const rarityLabel = {common:'Common',uncommon:'Uncommon',rare:'Rare',epic:'Epic',legendary:'Legendary'}[card.rarity];
+  const toast = document.createElement('div');
+  toast.id = 'card-drop-toast';
+  toast.className = 'card-drop-toast';
+  toast.innerHTML = `<div class="card-drop-label">✨ Nová karta získána!</div>
+    <div class="hcard ${card.rarity}" style="width:100px;cursor:pointer" onclick="openCardsModal()">
+      <div class="hcard-rarity">${rarityLabel}</div>
+      <div class="hcard-art">${card.art[0]}<span class="sub-emoji">${card.art[1]||''}</span></div>
+      <div class="hcard-divider"></div>
+      <div class="hcard-name">${card.name}</div>
+    </div>`;
+  document.body.appendChild(toast);
+  setTimeout(() => { if (toast.parentNode) toast.remove(); }, 4500);
+}
+
+function buildCardEl(card, earnedEntry, large) {
+  const rarityLabel = {common:'Common',uncommon:'Uncommon',rare:'Rare',epic:'Epic',legendary:'Legendary'}[card.rarity];
+  const stars = '★'.repeat({common:1,uncommon:2,rare:3,epic:4,legendary:5}[card.rarity]);
+  const dateStr = earnedEntry ? earnedEntry.date.slice(0,10).split('-').reverse().join('.') : '';
+  const el = document.createElement('div');
+  el.className = `hcard ${card.rarity}${large ? ' card-detail-large' : ''}`;
+  el.innerHTML = `
+    <div class="hcard-rarity">${stars} ${rarityLabel}</div>
+    <div class="hcard-art">${card.art[0]}<span class="sub-emoji">${card.art[1]||''}</span></div>
+    <div class="hcard-divider"></div>
+    <div class="hcard-name">${card.name}</div>
+    <div class="hcard-flavor">${card.flavor}</div>
+    <div class="hcard-meta">${dateStr ? `<div class="hcard-date">📅 ${dateStr}</div>` : ''}#${card.id.toUpperCase()}</div>`;
+  return el;
+}
+
+function renderCardsPreview() {
+  const wrap = document.getElementById('cards-preview-wrap');
+  if (!wrap) return;
+  const earned = loadEarnedCards();
+  if (earned.length === 0) {
+    wrap.innerHTML = '<div class="cards-empty">Splň 7denní streak nebo 7 výzev a získej první kartu! 🃏</div>';
+    return;
+  }
+  const last3 = earned.slice(-3).reverse();
+  const row = document.createElement('div');
+  row.className = 'cards-preview-row';
+  last3.forEach(e => {
+    const card = HABIT_CARDS.find(c => c.id === e.id);
+    if (!card) return;
+    const el = buildCardEl(card, e);
+    el.addEventListener('click', () => openCardDetail(card.id));
+    row.appendChild(el);
+  });
+  wrap.innerHTML = '';
+  wrap.appendChild(row);
+}
+
+let _currentCardFilter = 'all';
+let _currentDetailId = null;
+
+function openCardsModal() {
+  const modal = document.getElementById('cards-modal');
+  if (!modal) return;
+  modal.style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+  renderCardsModalContent(_currentCardFilter);
+}
+
+function closeCardsModal() {
+  const modal = document.getElementById('cards-modal');
+  if (modal) { modal.style.display = 'none'; document.body.style.overflow = ''; }
+}
+
+function renderCardsModalContent(filter) {
+  _currentCardFilter = filter;
+  const earned = loadEarnedCards();
+  const earnedMap = new Map(earned.map(e => [e.id, e]));
+  const filters = ['all','common','uncommon','rare','epic','legendary'];
+  const filterLabels = {all:'Vše',common:'Common',uncommon:'Uncommon',rare:'Rare',epic:'Epic',legendary:'Legendary'};
+  const filtersEl = document.getElementById('cards-modal-filters');
+  if (filtersEl) filtersEl.innerHTML = filters.map(f =>
+    `<button class="cfilter${f===filter?' active':''}" onclick="renderCardsModalContent('${f}')">${filterLabels[f]}</button>`
+  ).join('');
+  const countEl = document.getElementById('cards-modal-count');
+  if (countEl) countEl.textContent = `${earned.length} / ${HABIT_CARDS.length}`;
+  const grid = document.getElementById('cards-modal-grid');
+  if (!grid) return;
+  let cards = filter === 'all' ? HABIT_CARDS : HABIT_CARDS.filter(c => c.rarity === filter);
+  const earnedCards = cards.filter(c => earnedMap.has(c.id));
+  const lockedCards = cards.filter(c => !earnedMap.has(c.id));
+  grid.innerHTML = '';
+  [...earnedCards, ...lockedCards].forEach(card => {
+    const entry = earnedMap.get(card.id);
+    const el = buildCardEl(card, entry || null);
+    if (!entry) { el.classList.add('locked'); }
+    else el.addEventListener('click', () => openCardDetail(card.id));
+    grid.appendChild(el);
+  });
+}
+
+function openCardDetail(cardId) {
+  const card = HABIT_CARDS.find(c => c.id === cardId);
+  if (!card) return;
+  _currentDetailId = cardId;
+  const earned = loadEarnedCards();
+  const entry = earned.find(e => e.id === cardId);
+  const modal = document.getElementById('card-detail-modal');
+  const cardWrap = document.getElementById('card-detail-card');
+  const statEl = document.getElementById('card-detail-stat');
+  if (!modal || !cardWrap) return;
+  cardWrap.innerHTML = '';
+  cardWrap.appendChild(buildCardEl(card, entry, true));
+  const rarityNames = {common:'Common',uncommon:'Uncommon',rare:'Rare',epic:'Epic',legendary:'Legendary'};
+  const dateStr = entry ? entry.date.split('-').reverse().join('.') : '—';
+  if (statEl) statEl.innerHTML = `Karta <strong>${rarityNames[card.rarity]}</strong> · získána ${dateStr}<br><em style="color:rgba(255,255,255,.4)">"${card.flavor}"</em>`;
+  modal.style.display = 'flex';
+}
+
+function closeCardDetail() {
+  const modal = document.getElementById('card-detail-modal');
+  if (modal) modal.style.display = 'none';
+  _currentDetailId = null;
+}
+
+function shareCurrentCard() {
+  const card = HABIT_CARDS.find(c => c.id === _currentDetailId);
+  if (!card) return;
+  const earned = loadEarnedCards();
+  const entry = earned.find(e => e.id === card.id);
+  const dateStr = entry ? entry.date.split('-').reverse().join('.') : '';
+  const rarityLabel = {common:'Common',uncommon:'Uncommon',rare:'Rare',epic:'Epic',legendary:'Legendary'}[card.rarity];
+  const text = `🃏 Právě jsem odemkl/a kartu "${card.name}" (${rarityLabel}) na habitsofwinners.cz!\n${card.art[0]} ${card.flavor}\n${dateStr ? '📅 '+dateStr : ''}\n\n👇 Sbírej karty ty taky:`;
+  const shareData = { title: `Karta: ${card.name}`, text, url: 'https://habitsofwinners.cz' };
+  if (navigator.share && navigator.canShare && navigator.canShare(shareData)) {
+    navigator.share(shareData).catch(()=>{});
+  } else {
+    navigator.clipboard.writeText(text + '\nhttps://habitsofwinners.cz').then(() => showToast('📋 Text pro sdílení zkopírován!')).catch(() => showToast('Sdílet: habitsofwinners.cz 🃏'));
+  }
+}
+
+// ════════════════════════════════════════════
 //  HLASOVÁNÍ O PŘÍŠTÍ VÝZVU
 // ════════════════════════════════════════════
 async function loadChallengeVoting() {
@@ -7317,6 +7585,10 @@ function loadProgress() {
       </div>`;
     }).join('');
   }
+
+  // Sběratelské karty
+  checkAndAwardCards();
+  renderCardsPreview();
 
   // Referral box
   const refLink = getReferralLink();
@@ -7827,6 +8099,97 @@ const PUBLIC_CHALLENGES = [
   { month: 'Říjen',    emoji: '🍺', name: 'Sober October',              desc: 'Měsíc bez alkoholu a jasná hlava',                        m: 10 },
   { month: 'Listopad', emoji: '💸', name: 'No‑Spend November',          desc: 'Jen nutné výdaje — peníze zůstanou tam, kde patří',       m: 11 },
   { month: 'Prosinec', emoji: '🎄', name: 'Advent disciplíny',          desc: '24 mikronávyků — jeden každý den adventu',                m: 12 },
+];
+
+// ════════════════════════════════════════════
+//  SBĚRATELSKÉ KARTY — 80 ke sbírání (rozšiřitelné)
+// ════════════════════════════════════════════
+const HABIT_CARDS = [
+  // ── COMMON ──────────────────────────────
+  {id:'c01',name:'První krok',       rarity:'common',   art:['🌱','✨'], flavor:'Začátek je polovina cesty.',                    cat:'start',    req:s=>s.done>=1},
+  {id:'c02',name:'Trio výzev',       rarity:'common',   art:['⚡','⚡'], flavor:'Energie roste s každou splněnou výzvou.',       cat:'start',    req:s=>s.done>=3},
+  {id:'c03',name:'Ranní bojovník',   rarity:'common',   art:['🌅','☕'], flavor:'Vstát dřív než ostatní je polovina vítězství.', cat:'morning',  req:s=>s.streak>=3},
+  {id:'c04',name:'Pohyblivec',       rarity:'common',   art:['🚶','💨'], flavor:'Každý krok se počítá.',                         cat:'sport',    req:s=>s.done>=5},
+  {id:'c05',name:'Hydratátor',       rarity:'common',   art:['💧','🫧'], flavor:'Voda je základ všeho.',                         cat:'health',   req:s=>s.done>=4},
+  {id:'c06',name:'Čtenář',           rarity:'common',   art:['📖','🕯'], flavor:'Každá přečtená strana mění tvůj pohled.',       cat:'mind',     req:s=>s.done>=6},
+  {id:'c07',name:'Digitální pauza',  rarity:'common',   art:['📵','🌿'], flavor:'Ztiš obrazovku, uslyšíš sebe.',                 cat:'digital',  req:s=>s.done>=7},
+  {id:'c08',name:'Kuchař duše',      rarity:'common',   art:['🍳','🌿'], flavor:'Sám si uvař, sám si odměn.',                    cat:'health',   req:s=>s.done>=8},
+  {id:'c09',name:'Noční klid',       rarity:'common',   art:['🌙','💤'], flavor:'Spánek není lenost. Je to superschopnost.',     cat:'sleep',    req:s=>s.done>=9},
+  {id:'c10',name:'Zápisník',         rarity:'common',   art:['📓','✒️'], flavor:'Napsáno = zpracováno.',                         cat:'mind',     req:s=>s.done>=10},
+  {id:'c11',name:'Tichý dech',       rarity:'common',   art:['🧘','🌬'], flavor:'Pět minut klidu změní celý den.',               cat:'mind',     req:s=>s.done>=11},
+  {id:'c12',name:'Studenokrevný',    rarity:'common',   art:['🚿','❄️'], flavor:'První vteřina je nejhorší. Pak přijde síla.',   cat:'cold',     req:s=>s.done>=12},
+  {id:'c13',name:'Výzva přijata',    rarity:'common',   art:['🤝','🔥'], flavor:'Slovo dáno, slovo dodrženo.',                   cat:'start',    req:s=>s.done>=14},
+  {id:'c14',name:'Na dobré cestě',   rarity:'common',   art:['🛤','🌄'],  flavor:'Každý den trochu dál.',                         cat:'start',    req:s=>s.done>=16},
+  {id:'c15',name:'Drobná vítězství', rarity:'common',   art:['🎯','✅'], flavor:'Velké změny jsou součet malých.',               cat:'start',    req:s=>s.done>=18},
+  {id:'c16',name:'Ranní svišť',      rarity:'common',   art:['🐿','☀️'], flavor:'Vstáváš dřív než si myslíš, že zvládneš.',      cat:'morning',  req:s=>s.streak>=5},
+  {id:'c17',name:'Malý hrdina',      rarity:'common',   art:['🦸','💪'], flavor:'Hrdinství není výjimka. Je to návyk.',           cat:'start',    req:s=>s.done>=20},
+  {id:'c18',name:'Síla vůle',        rarity:'common',   art:['🧱','🔥'], flavor:'Vůle je jako sval. Cvičením roste.',             cat:'mind',     req:s=>s.done>=22},
+  {id:'c19',name:'Rytmus těla',      rarity:'common',   art:['🏃','🎶'], flavor:'Pohyb se stává meditací.',                      cat:'sport',    req:s=>s.done>=24},
+  {id:'c20',name:'Základ položen',   rarity:'common',   art:['🪨','⛏'],  flavor:'Tvůj progress je tvoje základna.',              cat:'start',    req:s=>s.done>=26},
+  // ── UNCOMMON ────────────────────────────
+  {id:'u01',name:'Týdenní šampion',  rarity:'uncommon', art:['🔥','📅'], flavor:'7 dní. Žádná výmluva. Jen činy.',               cat:'streak',   req:s=>s.streak>=7},
+  {id:'u02',name:'Dvacetník',        rarity:'uncommon', art:['2️⃣','0️⃣'], flavor:'Dvacet splněných výzev. Náhoda? Stěží.',         cat:'milestone',req:s=>s.done>=20},
+  {id:'u03',name:'Ranní vlk',        rarity:'uncommon', art:['🐺','🌄'], flavor:'Vstáváš tehdy, kdy ostatní ještě spí.',          cat:'morning',  req:s=>s.streak>=7&&s.done>=10},
+  {id:'u04',name:'Ledový rytíř',     rarity:'uncommon', art:['🧊','⚔️'], flavor:'Zima tě nezastaví. Ani nepohodlí.',              cat:'cold',     req:s=>s.done>=28},
+  {id:'u05',name:'Čtenářský maraton',rarity:'uncommon', art:['📚','🏁'], flavor:'Jeden den, jedna strana. Měsíc, jedna kniha.',   cat:'mind',     req:s=>s.done>=30},
+  {id:'u06',name:'Třicátník',        rarity:'uncommon', art:['3️⃣','0️⃣'], flavor:'Třicet výzev splněno. Tohle je začátek.',        cat:'milestone',req:s=>s.done>=30},
+  {id:'u07',name:'Dvojtýden',        rarity:'uncommon', art:['📅','🔥'], flavor:'14 dní v řadě. Zvyk se začíná tvořit.',          cat:'streak',   req:s=>s.streak>=14},
+  {id:'u08',name:'Digitální mnich',  rarity:'uncommon', art:['💻','🧘'], flavor:'Offline = svoboda.',                             cat:'digital',  req:s=>s.done>=32},
+  {id:'u09',name:'Spánek mistra',    rarity:'uncommon', art:['🌙','👑'], flavor:'Osm hodin není luxus. Je to investice.',         cat:'sleep',    req:s=>s.done>=34},
+  {id:'u10',name:'Zelený expert',    rarity:'uncommon', art:['🥗','🌿'], flavor:'Jíš tak, jak chceš žít.',                       cat:'health',   req:s=>s.done>=36},
+  {id:'u11',name:'Hustý templ',      rarity:'uncommon', art:['🏋','💪'],  flavor:'Tělo je tvůj chrám. A je v rekonstrukci.',       cat:'sport',    req:s=>s.done>=38},
+  {id:'u12',name:'Hydratační guru',  rarity:'uncommon', art:['💦','🧬'], flavor:'Tělo je ze 60 % voda. Chovej se k ní lépe.',     cat:'health',   req:s=>s.done>=40},
+  {id:'u13',name:'Klidná mysl',      rarity:'uncommon', art:['🧠','🌀'], flavor:'Mysl v klidu zvládne cokoliv.',                  cat:'mind',     req:s=>s.done>=42},
+  {id:'u14',name:'Noční střela',     rarity:'uncommon', art:['🌃','🚀'], flavor:'Produktivita nepotřebuje sluneční světlo.',      cat:'mind',     req:s=>s.streak>=10},
+  {id:'u15',name:'Zápisník šampiona',rarity:'uncommon', art:['📝','🏆'], flavor:'Zapisuješ si, co si chceš zapamatovat.',         cat:'mind',     req:s=>s.done>=44},
+  {id:'u16',name:'Stálý jako hora',  rarity:'uncommon', art:['⛰','🌪'],  flavor:'Přišly bouře. Zůstal/a jsi.',                   cat:'streak',   req:s=>s.streak>=12},
+  {id:'u17',name:'Padesátník',       rarity:'uncommon', art:['5️⃣','0️⃣'], flavor:'Půl stovky. Kdos byl před měsícem?',             cat:'milestone',req:s=>s.done>=50},
+  {id:'u18',name:'Mistr rutiny',     rarity:'uncommon', art:['⚙️','🔄'], flavor:'Rutina není nuda. Je to základ svobody.',        cat:'habit',    req:s=>s.habitStreak>=14},
+  {id:'u19',name:'Síla zvyku',       rarity:'uncommon', art:['🪢','💡'], flavor:'Po 21 dnech se návyk stává součástí tebe.',      cat:'habit',    req:s=>s.habitStreak>=21},
+  {id:'u20',name:'Osobní PB',        rarity:'uncommon', art:['📈','🎯'], flavor:'Tvůj nejlepší čas je teď.',                     cat:'milestone',req:s=>s.done>=55},
+  // ── RARE ────────────────────────────────
+  {id:'r01',name:'Měsíční válečník', rarity:'rare',     art:['⚔️','🌕'], flavor:'30 dní. Každý den. Bez výjimky.',               cat:'streak',   req:s=>s.streak>=30},
+  {id:'r02',name:'Ledová krev',      rarity:'rare',     art:['🧊','🐉'], flavor:'Studená voda tě přestala trápit.',               cat:'cold',     req:s=>s.streak>=20},
+  {id:'r03',name:'Šedesátník',       rarity:'rare',     art:['6️⃣','0️⃣'], flavor:'Šedesát splněných výzev. Jsi jiný člověk.',      cat:'milestone',req:s=>s.done>=60},
+  {id:'r04',name:'Ranní mistr',      rarity:'rare',     art:['🌅','💪'], flavor:'Ráno je tvoje. Vždy bylo.',                      cat:'morning',  req:s=>s.streak>=25},
+  {id:'r05',name:'Filosofický boj',  rarity:'rare',     art:['🏛','⚡'],  flavor:'Aristoteles trénoval tělo i mysl. Ty taky.',     cat:'mind',     req:s=>s.done>=65},
+  {id:'r06',name:'Trenér sebe sama', rarity:'rare',     art:['🎓','🪞'], flavor:'Nikdo nezná tvoje limity lépe než ty.',          cat:'mind',     req:s=>s.done>=70},
+  {id:'r07',name:'Sprint měsíce',    rarity:'rare',     art:['🏁','⏱'],  flavor:'Rychlý start, pomalý konec, vždy v cíli.',       cat:'streak',   req:s=>s.streak>=28},
+  {id:'r08',name:'Diamantový habit', rarity:'rare',     art:['💎','🔄'], flavor:'Diamant vzniká tlakem a časem.',                 cat:'habit',    req:s=>s.habitStreak>=30},
+  {id:'r09',name:'Sedmdesátník',     rarity:'rare',     art:['7️⃣','0️⃣'], flavor:'Sedmdesát. Jsi v jiné lize.',                    cat:'milestone',req:s=>s.done>=70},
+  {id:'r10',name:'Pevná vůle',       rarity:'rare',     art:['💪','🗿'], flavor:'Vůle bez tréninku je jen přání.',                cat:'mind',     req:s=>s.done>=75},
+  {id:'r11',name:'Tichý drak',       rarity:'rare',     art:['🐉','🔇'], flavor:'Největší síla se projevuje v tichu.',            cat:'mind',     req:s=>s.done>=80},
+  {id:'r12',name:'Komunita pilíř',   rarity:'rare',     art:['🤝','🏛'], flavor:'Spolu jdeme dál než sami.',                     cat:'community',req:s=>s.commBadges>=1},
+  {id:'r13',name:'Stříbrný šampion', rarity:'rare',     art:['🥈','✨'], flavor:'Stříbro není prohra. Je to základ zlatého.',     cat:'milestone',req:s=>s.done>=85},
+  {id:'r14',name:'Rytmus života',    rarity:'rare',     art:['🎶','💓'], flavor:'Tvůj den má svůj rytmus. A je krásný.',          cat:'habit',    req:s=>s.habitStreak>=45},
+  {id:'r15',name:'Skrytá síla',      rarity:'rare',     art:['🌀','💥'], flavor:'Nejtišší vody jsou nejhlubší.',                  cat:'mind',     req:s=>s.done>=90},
+  {id:'r16',name:'Devadesátník',     rarity:'rare',     art:['9️⃣','0️⃣'], flavor:'Devět desítek výzev. Tady se oddělují skupiny.', cat:'milestone',req:s=>s.done>=90},
+  {id:'r17',name:'Třicetník habit',  rarity:'rare',     art:['🔄','🔥'], flavor:'30 dní návyku bez přerušení. Tohle je vzácné.',  cat:'habit',    req:s=>s.habitStreak>=30},
+  {id:'r18',name:'Modrý bouřlivák',  rarity:'rare',     art:['⚡','🌊'], flavor:'Bouře v klidu. Síla v pohybu.',                  cat:'sport',    req:s=>s.done>=95},
+  {id:'r19',name:'Stovkař',          rarity:'rare',     art:['💯','🎆'], flavor:'Sto výzev. Neuvěřitelné? Podívej se do zrcadla.',cat:'milestone',req:s=>s.done>=100},
+  {id:'r20',name:'Osmdesátník',      rarity:'rare',     art:['8️⃣','0️⃣'], flavor:'Osmdesát výzev. Tady se rodí legenda.',          cat:'milestone',req:s=>s.done>=80},
+  // ── EPIC ────────────────────────────────
+  {id:'e01',name:'Mistr disciplíny', rarity:'epic',     art:['👑','💪'], flavor:'Disciplína není omezení. Je to superpower.',     cat:'milestone',req:s=>s.streak>=60},
+  {id:'e02',name:'Stovkař legend',   rarity:'epic',     art:['💯','🏆'], flavor:'Sto výzev a stále hlad po dalších.',             cat:'milestone',req:s=>s.done>=100},
+  {id:'e03',name:'Purpurový šampion',rarity:'epic',     art:['🔮','⚡'], flavor:'Fialová není barva skromnosti.',                 cat:'streak',   req:s=>s.streak>=45},
+  {id:'e04',name:'Boss Hunter',      rarity:'epic',     art:['💀','⚔️'], flavor:'Byl tam Boss Fight. A ty ses vrátil/a s odznakem.',cat:'boss',  req:s=>s.bossBadges>=1},
+  {id:'e05',name:'Dvojitý Boss',     rarity:'epic',     art:['💀','💀'], flavor:'Dvě boss výzvy. Svět se musí přizpůsobit tobě.', cat:'boss',   req:s=>s.bossBadges>=2},
+  {id:'e06',name:'Komunita vůdce',   rarity:'epic',     art:['🤝','👑'], flavor:'Tři komunitní výzvy. Jsi páteř komunity.',       cat:'community',req:s=>s.commBadges>=3},
+  {id:'e07',name:'Páteční rytíř',    rarity:'epic',     art:['🗡','🔥'], flavor:'Pátek nevynecháš. Ani sobotu. Ani neděli.',      cat:'streak',   req:s=>s.streak>=50},
+  {id:'e08',name:'Devadesátník+',    rarity:'epic',     art:['⚙️','🚀'], flavor:'90 dní streak. Tohle není hobby. Je to identita.',cat:'streak',  req:s=>s.streak>=90},
+  {id:'e09',name:'Stodvacátník',     rarity:'epic',     art:['1️⃣','2️⃣'], flavor:'120 výzev. Jsi v top 1 % aplikace.',             cat:'milestone',req:s=>s.done>=120},
+  {id:'e10',name:'Návykový diamant', rarity:'epic',     art:['💎','🔄'], flavor:'60 dní plný návyk streak. Extrémně vzácné.',     cat:'habit',    req:s=>s.habitStreak>=60},
+  {id:'e11',name:'Třetí boss',       rarity:'epic',     art:['💀','🏅'], flavor:'Třetí Boss Fight odznak. Kolekce roste.',        cat:'boss',     req:s=>s.bossBadges>=3},
+  {id:'e12',name:'Streak 120',       rarity:'epic',     art:['⭐','💪'], flavor:'Streak 120 dní. Skoro půl roku bez zaváhání.',   cat:'streak',   req:s=>s.streak>=120},
+  // ── LEGENDARY ───────────────────────────
+  {id:'l01',name:'Legenda vzestupu', rarity:'legendary',art:['🌟','✨'], flavor:'Stovka dnů v řadě. Tohle je identita. Tohle jsi ty.',cat:'streak',req:s=>s.streak>=100},
+  {id:'l02',name:'Rok disciplíny',   rarity:'legendary',art:['🗓','🔱'], flavor:'365 dní. Celý rok. Kdo jsi byl loni?',           cat:'streak',  req:s=>s.streak>=365},
+  {id:'l03',name:'Temný vládce',     rarity:'legendary',art:['💀','👑'], flavor:'Čtyři Boss Fights. Komunita tě uznává jako krále.',cat:'boss', req:s=>s.bossBadges>=4},
+  {id:'l04',name:'Komunita šampion', rarity:'legendary',art:['🤝','🏆'], flavor:'Šest komunitních výzev. Ty jsi samotnou výzvou.',cat:'community',req:s=>s.commBadges>=6},
+  {id:'l05',name:'Dvoustovkář',      rarity:'legendary',art:['2️⃣','0️⃣'], flavor:'200 splněných výzev. Tenhle číslo říká vše.',    cat:'milestone',req:s=>s.done>=200},
+  {id:'l06',name:'Zlatý drak',       rarity:'legendary',art:['🐉','🌟'], flavor:'Drak nepůsobí silou. Působí věrností sobě samému.',cat:'streak',req:s=>s.done>=150&&s.streak>=60},
+  {id:'l07',name:'Věčný plamen',     rarity:'legendary',art:['🔥','♾️'], flavor:'Plamen, který nikdy nezhasíná.',                 cat:'streak',  req:s=>s.streak>=150},
+  {id:'l08',name:'Absolutní mistr',  rarity:'legendary',art:['⚡','👑'], flavor:'Neexistuje vyšší úroveň. Toto jsi dosáhl/a ty.',  cat:'milestone',req:s=>s.done>=150&&s.streak>=90},
 ];
 
 // Boss Fight měsíce — jedna těžká výzva s limitovaným odznakem
@@ -8518,6 +8881,7 @@ function toggleDone(id, e) {
       scheduleSyncToCloud();
     }
     showToast('✅ Výzva splněna! 🔥');
+    setTimeout(() => checkAndAwardCards(), 400);
   } else {
     completed.splice(idx,1);
     // Odeber z completedLog
@@ -9009,6 +9373,28 @@ async function runDiagnostics() {
 
 </script>
 
+<!-- ══ MODAL: Celá sbírka karet ══ -->
+<div class="cards-modal-overlay" id="cards-modal" style="display:none" onclick="if(event.target===this)closeCardsModal()">
+  <div class="cards-modal-inner">
+    <div class="cards-modal-header">
+      <div class="cards-modal-title">🃏 Sběratelské karty<span class="cards-modal-count" id="cards-modal-count">0 / 0</span></div>
+      <button class="cards-modal-close" onclick="closeCardsModal()">✕</button>
+    </div>
+    <div class="cards-modal-filters" id="cards-modal-filters"></div>
+    <div class="cards-modal-grid" id="cards-modal-grid"></div>
+  </div>
+</div>
+<!-- ══ MODAL: Detail karty ══ -->
+<div class="card-detail-overlay" id="card-detail-modal" style="display:none" onclick="if(event.target===this)closeCardDetail()">
+  <div class="card-detail-inner">
+    <div id="card-detail-card"></div>
+    <div class="card-detail-stat" id="card-detail-stat"></div>
+    <div class="card-detail-btns">
+      <button class="card-detail-btn share" onclick="shareCurrentCard()">📤 Sdílet kartu</button>
+      <button class="card-detail-btn close-btn" onclick="closeCardDetail()">Zavřít</button>
+    </div>
+  </div>
+</div>
 <script>
 // ═══════════════════════════════
 //  PWA – Manifest (inline)
