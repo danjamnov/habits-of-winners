@@ -2345,6 +2345,54 @@ html.logged-in #tab-progress { display: inline-flex; }
   background: var(--gold); color: #000; border-color: var(--gold);
 }
 
+/* ── TAB PARTA (pouze přihlášení) ── */
+#tab-parta { display: none; }
+html.logged-in #tab-parta { display: inline-flex; }
+
+/* ── CHAT ── */
+.team-chat-section { margin-top: 18px; }
+.team-chat-title { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-muted); margin-bottom: 10px; }
+.team-chat-feed { background: var(--surface); border-radius: 12px; max-height: 220px; overflow-y: auto; padding: 10px 12px; margin-bottom: 8px; display: flex; flex-direction: column; gap: 8px; }
+.chat-msg { display: flex; gap: 8px; align-items: flex-start; }
+.chat-msg-avatar { width: 28px; height: 28px; border-radius: 50%; background: var(--surface2); display: flex; align-items: center; justify-content: center; font-size: 0.85rem; flex-shrink: 0; overflow: hidden; }
+.chat-msg-avatar img { width: 100%; height: 100%; object-fit: cover; }
+.chat-msg-body { flex: 1; min-width: 0; }
+.chat-msg-header { display: flex; align-items: baseline; gap: 6px; margin-bottom: 1px; }
+.chat-msg-name { font-size: 0.72rem; font-weight: 700; color: var(--gold); }
+.chat-msg-time { font-size: 0.65rem; color: var(--text-muted); }
+.chat-msg-text { font-size: 0.82rem; color: var(--text); line-height: 1.45; word-break: break-word; }
+.chat-input-row { display: flex; gap: 6px; }
+.chat-input { flex: 1; padding: 9px 12px; border-radius: 10px; border: 1.5px solid var(--border); background: var(--surface); color: var(--text); font-size: 0.85rem; font-family: Outfit, sans-serif; }
+.chat-input:focus { outline: none; border-color: var(--gold); }
+.chat-send-btn { padding: 9px 14px; background: var(--gold); color: #000; border: none; border-radius: 10px; font-size: 0.85rem; font-weight: 700; cursor: pointer; flex-shrink: 0; }
+.chat-empty { text-align: center; font-size: 0.78rem; color: var(--text-muted); padding: 16px 0; }
+
+/* ── TÝMOVÁ VÝZVA ── */
+.team-challenge-section { margin-bottom: 18px; }
+.team-ch-title { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-muted); margin-bottom: 10px; }
+.team-challenge-card { background: var(--surface); border-radius: 12px; padding: 14px; }
+.team-challenge-name { font-size: 0.9rem; font-weight: 700; color: var(--text); margin-bottom: 10px; line-height: 1.4; }
+.team-ch-progress { height: 8px; background: var(--surface2); border-radius: 20px; overflow: hidden; margin-bottom: 6px; }
+.team-ch-bar { height: 100%; background: var(--gold); border-radius: 20px; transition: width 0.4s ease; }
+.team-ch-stats { font-size: 0.72rem; color: var(--text-muted); margin-bottom: 12px; }
+.btn-ch-done { width: 100%; padding: 10px; background: var(--gold); color: #000; border: none; border-radius: 10px; font-size: 0.85rem; font-weight: 700; cursor: pointer; font-family: Outfit, sans-serif; }
+.btn-ch-done:disabled { opacity: 0.5; cursor: default; background: var(--surface2); color: var(--text-muted); }
+.btn-ch-pick { width: 100%; padding: 9px; background: transparent; border: 1.5px dashed var(--border); color: var(--text-muted); border-radius: 10px; font-size: 0.82rem; cursor: pointer; font-family: Outfit, sans-serif; margin-top: 8px; }
+.btn-ch-pick:hover { border-color: var(--gold); color: var(--gold); }
+.ch-pick-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 3000; display: flex; flex-direction: column; animation: fadeIn .2s ease; }
+.ch-pick-header { padding: 16px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,.08); flex-shrink: 0; }
+.ch-pick-header-title { font-size: 1rem; font-weight: 700; color: #fff; }
+.ch-pick-close { background: rgba(255,255,255,.1); border: none; color: #fff; border-radius: 50%; width: 32px; height: 32px; font-size: 1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+.ch-pick-search { padding: 10px 16px; flex-shrink: 0; }
+.ch-pick-search input { width: 100%; padding: 10px 14px; border-radius: 10px; border: 1.5px solid rgba(255,255,255,.15); background: rgba(255,255,255,.06); color: #fff; font-size: 0.9rem; box-sizing: border-box; font-family: Outfit, sans-serif; }
+.ch-pick-search input:focus { outline: none; border-color: var(--gold); }
+.ch-pick-list { flex: 1; overflow-y: auto; padding: 8px 16px 24px; }
+.cp-item { padding: 12px; background: rgba(255,255,255,.05); border-radius: 10px; margin-bottom: 6px; cursor: pointer; transition: background 0.15s; }
+.cp-item:hover { background: rgba(250,204,21,.12); }
+.cp-item-title { font-size: 0.88rem; font-weight: 600; color: #fff; margin-bottom: 2px; }
+.cp-item-meta { font-size: 0.72rem; color: rgba(255,255,255,.45); }
+
+
 /* ── SKIP LINK ── */
 .skip-link {
   position: absolute;
@@ -2928,6 +2976,7 @@ html.logged-in .hero-v2 { display: none; }
       <button class="nav-tab" id="tab-challenges" onclick="showPage('challenges')" data-cs="Výzvy" data-en="Challenges">Výzvy</button>
       <button class="nav-tab" id="tab-progress" onclick="showPage('progress')" data-cs="Pokrok" data-en="Progress">Pokrok</button>
       <button class="nav-tab" id="tab-friends" onclick="showPage('friends')" data-cs="Přátelé" data-en="Friends">Přátelé <span id="friend-req-badge" style="display:none;background:var(--red);color:#fff;border-radius:50%;width:16px;height:16px;font-size:0.6rem;font-weight:700;display:inline-flex;align-items:center;justify-content:center;margin-left:4px">0</span></button>
+      <button class="nav-tab" id="tab-parta" onclick="showPage('parta')" data-cs="Parta" data-en="Parta">Parta</button>
     </div>
   </div>
   <div class="nav-right" style="position:relative;margin-left:10px">
@@ -3541,13 +3590,7 @@ html.logged-in .hero-v2 { display: none; }
 <div class="page" id="page-friends">
   <div class="page-inner">
     <div class="section-head">
-      <div class="section-title">Přátelé <span>& Partu</span></div>
-    </div>
-
-    <!-- ══ SEKCE TÝM ══ -->
-    <div class="team-wrap" id="team-wrap">
-      <!-- vyplní loadTeamSection() -->
-      <div style="text-align:center;padding:32px 0;color:var(--text-muted);font-size:0.82rem">Načítám tým…</div>
+      <div class="section-title">Přátelé <span>& žebříček</span></div>
     </div>
 
     <div class="friends-layout">
@@ -3617,6 +3660,18 @@ html.logged-in .hero-v2 { display: none; }
 <!-- ══════════════════════════════════════════
      SETTINGS
 ══════════════════════════════════════════ -->
+
+<div class="page" id="page-parta">
+  <div class="page-inner">
+    <div class="section-head">
+      <div class="section-title">Moje <span>Parta</span></div>
+    </div>
+    <div class="team-wrap" id="team-wrap">
+      <div style="text-align:center;padding:32px 0;color:var(--text-muted);font-size:0.82rem">Načítám partu…</div>
+    </div>
+  </div>
+</div>
+
 <div class="page" id="page-settings">
   <div class="settings-wrap">
     <div class="section-head" style="margin-bottom:28px">
@@ -7862,8 +7917,31 @@ function renderTeamCard(wrap) {
       </div>
       <div id="team-lb-list">${renderLeaderboard(members, myId)}</div>
 
+      <div class="team-challenge-section" id="team-challenge-section">
+        <div class="team-ch-title">⚡ Týmová výzva</div>
+        <div id="team-challenge-content"><div style="font-size:0.78rem;color:var(--text-muted)">Načítám…</div></div>
+      </div>
+
+      <div class="team-chat-section">
+        <div class="team-chat-title">💬 Chat party</div>
+        <div class="team-chat-feed" id="team-chat-feed">
+          <div class="chat-empty">Načítám zprávy…</div>
+        </div>
+        <div class="chat-input-row">
+          <input class="chat-input" id="chat-input" placeholder="Napiš zprávu…" maxlength="300" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendTeamMessage();}">
+          <button class="chat-send-btn" onclick="sendTeamMessage()">↑</button>
+        </div>
+      </div>
+
       <button class="btn-leave-team" onclick="leaveTeam()">← Opustit partu</button>
     </div>`;
+  // Načti výzvu a chat po renderování
+  setTimeout(() => {
+    if (_teamData) {
+      loadTeamChallenge(_teamData.team.id, _teamData.team.created_by === _teamData.myId);
+      loadTeamChat(_teamData.team.id);
+    }
+  }, 50);
 }
 
 function renderLeaderboard(members, myId) {
@@ -7944,6 +8022,248 @@ async function leaveTeam() {
   } catch(e) { showToast('Chyba: ' + e.message); }
 }
 
+
+// ════════════════════════════════════════════
+//  PARTA — CHAT
+// ════════════════════════════════════════════
+let _chatChannel = null;
+let _chatProfiles = {};  // userId → {nickname, avatar}
+
+async function loadTeamChat(teamId) {
+  const feed = document.getElementById('team-chat-feed');
+  if (!feed) return;
+
+  // Načti profily členů (pro jména v chatu)
+  if (_teamData && _teamData.members) {
+    _teamData.members.forEach(m => { _chatProfiles[m.id] = { nickname: m.nickname, avatar: m.avatar }; });
+  }
+
+  try {
+    const { data: msgs } = await supa
+      .from('team_messages')
+      .select('id, user_id, message, created_at')
+      .eq('team_id', teamId)
+      .order('created_at', { ascending: true })
+      .limit(60);
+
+    renderChatMessages(feed, msgs || []);
+
+    // Realtime subscribe
+    if (_chatChannel) { supa.removeChannel(_chatChannel); }
+    _chatChannel = supa.channel('team-chat-' + teamId)
+      .on('postgres_changes', {
+        event: 'INSERT', schema: 'public', table: 'team_messages',
+        filter: 'team_id=eq.' + teamId
+      }, payload => {
+        const newMsg = payload.new;
+        appendChatMessage(feed, newMsg);
+      })
+      .subscribe();
+  } catch(e) {
+    if (feed) feed.innerHTML = '<div class="chat-empty">Nepodařilo se načíst chat.</div>';
+  }
+}
+
+function renderChatMessages(feed, msgs) {
+  if (!msgs.length) {
+    feed.innerHTML = '<div class="chat-empty">Zatím žádné zprávy 👋<br>Pozdrav partu!</div>';
+    return;
+  }
+  feed.innerHTML = msgs.map(m => chatMsgHtml(m)).join('');
+  feed.scrollTop = feed.scrollHeight;
+}
+
+function appendChatMessage(feed, msg) {
+  const empty = feed.querySelector('.chat-empty');
+  if (empty) empty.remove();
+  const div = document.createElement('div');
+  div.innerHTML = chatMsgHtml(msg);
+  feed.appendChild(div.firstChild);
+  feed.scrollTop = feed.scrollHeight;
+}
+
+function chatMsgHtml(msg) {
+  const profile = _chatProfiles[msg.user_id] || {};
+  const nick = escapeHtml(profile.nickname || '?');
+  const av = profile.avatar;
+  const isMe = currentUser && msg.user_id === currentUser.id;
+  let avHtml;
+  if (av && av.startsWith('data:')) avHtml = `<img src="${av}" alt="">`;
+  else avHtml = av || '🏃';
+  const time = new Date(msg.created_at).toLocaleTimeString('cs-CZ', { hour: '2-digit', minute: '2-digit' });
+  return `<div class="chat-msg${isMe?' mine':''}">
+    <div class="chat-msg-avatar">${avHtml}</div>
+    <div class="chat-msg-body">
+      <div class="chat-msg-header">
+        <span class="chat-msg-name">@${nick}</span>
+        <span class="chat-msg-time">${time}</span>
+      </div>
+      <div class="chat-msg-text">${escapeHtml(msg.message)}</div>
+    </div>
+  </div>`;
+}
+
+async function sendTeamMessage() {
+  if (!isLoggedIn() || !_teamData) return;
+  const inp = document.getElementById('chat-input');
+  if (!inp) return;
+  const msg = inp.value.trim();
+  if (!msg) return;
+  inp.value = '';
+  try {
+    await supa.from('team_messages').insert({
+      team_id: _teamData.team.id,
+      user_id: currentUser.id,
+      message: msg
+    });
+  } catch(e) { showToast('Nepodařilo se odeslat: ' + e.message); }
+}
+
+// ════════════════════════════════════════════
+//  PARTA — TÝMOVÁ VÝZVA
+// ════════════════════════════════════════════
+
+async function loadTeamChallenge(teamId, isCaptain) {
+  const wrap = document.getElementById('team-challenge-content');
+  if (!wrap) return;
+
+  try {
+    // Načti aktivní výzvu z týmu
+    const { data: team } = await supa.from('teams')
+      .select('active_challenge_id, challenge_started_at')
+      .eq('id', teamId).single();
+
+    if (!team || !team.active_challenge_id) {
+      renderNoChallengeState(wrap, teamId, isCaptain);
+      return;
+    }
+
+    const cid = team.active_challenge_id;
+    // Najdi výzvu v lokálním poli
+    const ch = (typeof challenges !== 'undefined' ? challenges : []).find(c => c.id === cid);
+    const chTitle = ch ? ch.title : `Výzva #${cid}`;
+
+    // Načti splnění
+    const { data: completions } = await supa.from('team_challenge_completions')
+      .select('user_id, completed_at')
+      .eq('team_id', teamId)
+      .eq('challenge_id', cid);
+
+    const doneIds = (completions || []).map(c => c.user_id);
+    const memberCount = _teamData ? _teamData.members.length : 1;
+    const doneCount = doneIds.length;
+    const pct = memberCount > 0 ? Math.round((doneCount / memberCount) * 100) : 0;
+    const iDone = currentUser && doneIds.includes(currentUser.id);
+
+    renderChallengeCard(wrap, teamId, cid, chTitle, doneCount, memberCount, pct, iDone, isCaptain);
+  } catch(e) {
+    if (wrap) wrap.innerHTML = '<div style="font-size:0.78rem;color:var(--text-muted)">Nepodařilo se načíst výzvu.</div>';
+  }
+}
+
+function renderChallengeCard(wrap, teamId, cid, title, doneCount, memberCount, pct, iDone, isCaptain) {
+  wrap.innerHTML = `
+    <div class="team-challenge-card">
+      <div class="team-challenge-name">📋 ${escapeHtml(title)}</div>
+      <div class="team-ch-progress">
+        <div class="team-ch-bar" style="width:${pct}%"></div>
+      </div>
+      <div class="team-ch-stats">${doneCount} z ${memberCount} členů splnilo · ${pct}%</div>
+      <button class="btn-ch-done" onclick="completeTeamChallenge('${teamId}', ${cid}, this)"
+        ${iDone ? 'disabled' : ''}>
+        ${iDone ? '✅ Splněno' : '✅ Splnil/a jsem!'}
+      </button>
+      ${isCaptain ? `<button class="btn-ch-pick" onclick="openChallengePicker('${teamId}')">🔄 Změnit výzvu</button>` : ''}
+    </div>`;
+}
+
+function renderNoChallengeState(wrap, teamId, isCaptain) {
+  if (isCaptain) {
+    wrap.innerHTML = `
+      <div class="team-challenge-card">
+        <div style="font-size:0.82rem;color:var(--text-muted);margin-bottom:10px">Žádná aktivní výzva. Vyber výzvu pro celou partu!</div>
+        <button class="btn-ch-pick" onclick="openChallengePicker('${teamId}')">➕ Vybrat výzvu</button>
+      </div>`;
+  } else {
+    wrap.innerHTML = `
+      <div class="team-challenge-card">
+        <div style="font-size:0.82rem;color:var(--text-muted)">Kapitán zatím nevybral výzvu.</div>
+      </div>`;
+  }
+}
+
+async function completeTeamChallenge(teamId, challengeId, btn) {
+  if (!isLoggedIn() || !_teamData) return;
+  if (btn) { btn.disabled = true; btn.textContent = '…'; }
+  try {
+    await supa.from('team_challenge_completions').insert({
+      team_id: teamId, challenge_id: challengeId, user_id: currentUser.id
+    });
+    showToast('🎉 Výzva splněna! Parta postupuje vpřed.');
+    // Reload
+    const isCaptain = _teamData.team.created_by === currentUser.id;
+    loadTeamChallenge(teamId, isCaptain);
+  } catch(e) {
+    if (btn) { btn.disabled = false; btn.textContent = '✅ Splnil/a jsem!'; }
+    showToast('Chyba: ' + e.message);
+  }
+}
+
+// Picker výzev
+let _challengePickerTeamId = null;
+function openChallengePicker(teamId) {
+  _challengePickerTeamId = teamId;
+  const allChallenges = typeof challenges !== 'undefined' ? challenges : [];
+  const overlay = document.createElement('div');
+  overlay.className = 'ch-pick-overlay';
+  overlay.id = 'ch-pick-overlay';
+  overlay.innerHTML = `
+    <div class="ch-pick-header">
+      <div class="ch-pick-header-title">⚡ Vyber týmovou výzvu</div>
+      <button class="ch-pick-close" onclick="document.getElementById('ch-pick-overlay').remove()">✕</button>
+    </div>
+    <div class="ch-pick-search">
+      <input id="ch-pick-q" placeholder="Hledat výzvu…" oninput="filterChallengePicker()" autofocus>
+    </div>
+    <div class="ch-pick-list" id="ch-pick-list">
+      ${renderChallengePickerItems(allChallenges)}
+    </div>`;
+  document.body.appendChild(overlay);
+}
+
+function renderChallengePickerItems(list) {
+  if (!list.length) return '<div style="color:rgba(255,255,255,.4);text-align:center;padding:24px;font-size:0.82rem">Žádné výsledky</div>';
+  return list.slice(0, 80).map(c => `
+    <div class="cp-item" onclick="pickTeamChallenge(${c.id})">
+      <div class="cp-item-title">${escapeHtml(c.title)}</div>
+      <div class="cp-item-meta">${escapeHtml(c.cat || '')} · ${c.diff || ''}</div>
+    </div>`).join('');
+}
+
+function filterChallengePicker() {
+  const q = (document.getElementById('ch-pick-q')?.value || '').toLowerCase();
+  const allChallenges = typeof challenges !== 'undefined' ? challenges : [];
+  const filtered = q ? allChallenges.filter(c => c.title.toLowerCase().includes(q)) : allChallenges;
+  const list = document.getElementById('ch-pick-list');
+  if (list) list.innerHTML = renderChallengePickerItems(filtered);
+}
+
+async function pickTeamChallenge(challengeId) {
+  if (!_challengePickerTeamId || !isLoggedIn()) return;
+  document.getElementById('ch-pick-overlay')?.remove();
+  try {
+    await supa.from('teams').update({
+      active_challenge_id: challengeId,
+      challenge_started_at: new Date().toISOString()
+    }).eq('id', _challengePickerTeamId);
+    // Smaž stará splnění pro tuto výzvu
+    await supa.from('team_challenge_completions').delete()
+      .eq('team_id', _challengePickerTeamId).eq('challenge_id', challengeId);
+    showToast('⚡ Nová týmová výzva nastavena!');
+    loadTeamChallenge(_challengePickerTeamId, true);
+  } catch(e) { showToast('Chyba: ' + e.message); }
+}
+
 function init() {
   applyTheme(); applyLang();
   checkUrlParams();
@@ -8001,7 +8321,8 @@ function showPage(id) {
   }
   if(id==='challenges') { loadChallengeRatingsForCards(); renderDailyChallenges(); renderBossFight(); renderCommunityChallenge(); loadChallengeVoting(); }
   if(id==='allhabits') { loadHabitFavs(); }
-  if(id==='friends') { syncProfileToSupabase(); loadFriends(); loadTeamSection(); }
+  if(id==='friends') { syncProfileToSupabase(); loadFriends(); }
+  if(id==='parta') { loadTeamSection(); }
   if(id==='progress') { loadProgress(); }
   if(id==='settings' && isLoggedIn()) {
     loadUserSettings().then(() => {
