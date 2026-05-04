@@ -3086,6 +3086,22 @@ html.logged-in .hero-v2 { display: none; }
         <button class="btn-view-profile" onclick="openMyPublicProfile()">🔗 Můj veřejný profil</button>
       </div>
     </div>
+
+    <div class="progress-share-box" id="progress-referral-box" style="margin-top:14px;text-align:left">
+      <div class="progress-share-title">🎁 Pozvi přátele — získej bonus</div>
+      <div class="progress-share-sub">Po 2 úspěšných pozvánkách odemkneš <strong>Streak Save 2× za měsíc</strong>.</div>
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px">
+        <div style="flex:1;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px 14px;font-size:0.8rem;color:var(--text);font-family:monospace;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" id="prog-ref-link">habitsofwinners.cz/?ref=...</div>
+        <button onclick="copyReferralLink()" style="padding:10px 14px;background:var(--gold);color:#000;border:none;border-radius:10px;font-size:0.82rem;font-weight:700;cursor:pointer;white-space:nowrap;font-family:Outfit,sans-serif">Kopírovat</button>
+      </div>
+      <div style="background:var(--surface);border-radius:8px;height:6px;margin-bottom:8px;overflow:hidden">
+        <div id="prog-ref-fill" style="width:0%;height:100%;background:var(--gold);border-radius:8px;transition:width 0.6s"></div>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:0.74rem;color:var(--text-muted)">
+        <span id="prog-ref-count">0 z 2 přátel pozváno</span>
+        <span id="prog-ref-reward" style="color:var(--gold);font-weight:600"></span>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -5395,7 +5411,7 @@ async function loadSettings() {
     if (nicknameEl) nicknameEl.value = nickname;
   }
   // Load profile settings (toggle groups, day picker, switches)
-  await loadAvatarFromSupabase();
+  try { await loadAvatarFromSupabase(); } catch(e) { console.warn('loadAvatarFromSupabase:', e); }
   loadProfileSettings();
   // Load referral section
   loadReferralSection();
@@ -6672,6 +6688,33 @@ function loadProgress() {
       </div>`;
     }).join('');
   }
+
+  // Referral box
+  const refLink = getReferralLink();
+  const progRefLink = document.getElementById('prog-ref-link');
+  if (progRefLink) progRefLink.textContent = refLink;
+
+  // Načti počty referralů async
+  loadProgressReferral();
+}
+
+async function loadProgressReferral() {
+  const nick = currentUser?.user_metadata?.nickname || currentUser?.email?.split('@')[0] || '';
+  if (!nick) return;
+  try {
+    const { data } = await supa.from('profiles').select('id').eq('settings->>referred_by', nick.toLowerCase());
+    const count = data ? data.length : 0;
+    const needed = 2;
+    const pct = Math.min(100, Math.round(count / needed * 100));
+    const unlocked = count >= needed;
+
+    const fill = document.getElementById('prog-ref-fill');
+    const countEl = document.getElementById('prog-ref-count');
+    const rewardEl = document.getElementById('prog-ref-reward');
+    if (fill) fill.style.width = pct + '%';
+    if (countEl) countEl.textContent = `${count} z ${needed} přátel pozváno`;
+    if (rewardEl) rewardEl.textContent = unlocked ? '✅ Bonus odemčen!' : `Ještě ${needed - count} ${needed - count === 1 ? 'přítel' : 'přátelé'}`;
+  } catch(e) { console.warn('loadProgressReferral:', e); }
 }
 
 function init() {
@@ -8080,18 +8123,4 @@ async function runDiagnostics() {
 </script>
 
 <script>
-// ═══════════════════════════════
-//  PWA – Manifest (inline)
-// ═══════════════════════════════
-(function() {
-  const manifest = {
-    name: "Habits of Winners",
-    short_name: "HoW",
-    description: "500 výzev, návyky a tracker pro každodenní zlepšování.",
-    start_url: "/",
-    display: "standalone",
-    background_color: "#1a1a2e",
-    theme_color: "#C9A96E",
-    orientation: "portrait",
-    icons: [
-      { src: "data:image/png;base64,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
+// ══════════════════════════════�
