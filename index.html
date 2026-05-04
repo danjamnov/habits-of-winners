@@ -1929,6 +1929,134 @@ html.logged-in #tab-progress { display: inline-flex; }
 }
 .vote-already { text-align: center; font-size: 0.78rem; color: var(--text-muted); margin-top: 12px; }
 
+/* ── TÝMY ── */
+.team-wrap { margin-bottom: 28px; }
+
+/* Žádný tým — onboarding */
+.team-onboarding {
+  background: var(--surface2); border-radius: 18px; padding: 28px 20px;
+  text-align: center;
+}
+.team-onboarding-icon { font-size: 2.4rem; margin-bottom: 10px; }
+.team-onboarding-title { font-size: 1rem; font-weight: 700; color: var(--text); margin-bottom: 6px; }
+.team-onboarding-sub { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 20px; }
+.team-onboarding-btns { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+.btn-team-create {
+  background: var(--gold); color: #000; border: none; border-radius: 12px;
+  padding: 11px 22px; font-size: 0.88rem; font-weight: 700;
+  cursor: pointer; font-family: Outfit, sans-serif;
+}
+.btn-team-join {
+  background: var(--surface); border: 1.5px solid var(--border); color: var(--text);
+  border-radius: 12px; padding: 11px 22px; font-size: 0.88rem; font-weight: 600;
+  cursor: pointer; font-family: Outfit, sans-serif;
+}
+.btn-team-create:hover, .btn-team-join:hover { opacity: 0.82; }
+
+/* Formuláře */
+.team-form {
+  background: var(--surface2); border-radius: 16px; padding: 20px;
+  margin-bottom: 14px;
+}
+.team-form-title { font-size: 0.9rem; font-weight: 700; color: var(--text); margin-bottom: 14px; }
+.team-emoji-row { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+.team-emoji-btn {
+  width: 36px; height: 36px; border-radius: 8px; border: 1.5px solid var(--border);
+  background: var(--surface); font-size: 1.1rem; cursor: pointer; display: flex;
+  align-items: center; justify-content: center; transition: border-color 0.1s;
+}
+.team-emoji-btn.selected { border-color: var(--gold); background: var(--gold-bg); }
+.team-input {
+  width: 100%; padding: 11px 14px; border-radius: 10px;
+  border: 1.5px solid var(--border); background: var(--surface);
+  color: var(--text); font-size: 0.9rem; font-family: Outfit, sans-serif;
+  margin-bottom: 12px; box-sizing: border-box;
+}
+.team-input:focus { outline: none; border-color: var(--gold); }
+.team-form-row { display: flex; gap: 8px; }
+.btn-team-submit {
+  flex: 1; padding: 11px; background: var(--gold); color: #000;
+  border: none; border-radius: 10px; font-size: 0.88rem; font-weight: 700;
+  cursor: pointer; font-family: Outfit, sans-serif;
+}
+.btn-team-cancel {
+  padding: 11px 14px; background: transparent; border: 1.5px solid var(--border);
+  color: var(--text-muted); border-radius: 10px; font-size: 0.88rem;
+  cursor: pointer; font-family: Outfit, sans-serif;
+}
+
+/* Karta týmu (přihlášený člen) */
+.team-card {
+  background: linear-gradient(135deg, var(--gold-bg) 0%, var(--surface2) 100%);
+  border: 1.5px solid var(--gold-dim); border-radius: 18px; padding: 20px;
+  margin-bottom: 16px;
+}
+.team-card-header { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+.team-card-emoji { font-size: 2rem; }
+.team-card-name { font-size: 1.1rem; font-weight: 800; color: var(--text); }
+.team-card-meta { font-size: 0.74rem; color: var(--text-muted); margin-top: 2px; }
+.team-invite-row {
+  display: flex; align-items: center; gap: 8px; margin-bottom: 4px;
+}
+.team-invite-code {
+  flex: 1; font-family: monospace; font-size: 0.95rem; font-weight: 700;
+  color: var(--gold); background: var(--surface); border: 1px solid var(--gold-dim);
+  border-radius: 8px; padding: 8px 12px; letter-spacing: 0.1em;
+}
+.btn-copy-invite {
+  padding: 8px 14px; background: var(--gold); color: #000; border: none;
+  border-radius: 8px; font-size: 0.8rem; font-weight: 700; cursor: pointer;
+  font-family: Outfit, sans-serif;
+}
+.team-invite-hint { font-size: 0.72rem; color: var(--text-muted); margin-bottom: 14px; }
+
+/* Žebříček */
+.team-leaderboard-title {
+  font-size: 0.75rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.06em; color: var(--text-muted); margin-bottom: 10px;
+}
+.team-lb-row {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 12px; border-radius: 12px; margin-bottom: 6px;
+  background: var(--surface); transition: background 0.15s;
+}
+.team-lb-row.me { background: var(--gold-bg); border: 1px solid var(--gold-dim); }
+.team-lb-rank {
+  font-size: 0.85rem; font-weight: 800; color: var(--text-muted);
+  width: 22px; text-align: center; flex-shrink: 0;
+}
+.team-lb-rank.gold { color: #f59e0b; }
+.team-lb-rank.silver { color: #94a3b8; }
+.team-lb-rank.bronze { color: #a16207; }
+.team-lb-avatar {
+  width: 34px; height: 34px; border-radius: 50%; background: var(--surface2);
+  display: flex; align-items: center; justify-content: center; font-size: 1rem;
+  flex-shrink: 0; overflow: hidden;
+}
+.team-lb-avatar img { width: 100%; height: 100%; object-fit: cover; }
+.team-lb-info { flex: 1; min-width: 0; }
+.team-lb-name { font-size: 0.85rem; font-weight: 700; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.team-lb-stats { font-size: 0.7rem; color: var(--text-muted); margin-top: 1px; }
+.team-lb-streak { font-size: 0.88rem; font-weight: 800; color: var(--text); white-space: nowrap; }
+
+.btn-leave-team {
+  width: 100%; margin-top: 14px; padding: 10px; background: transparent;
+  border: 1.5px solid var(--border); color: var(--text-muted); border-radius: 10px;
+  font-size: 0.8rem; cursor: pointer; font-family: Outfit, sans-serif;
+}
+.btn-leave-team:hover { border-color: var(--red); color: var(--red); }
+
+/* Přepínač metrik žebříčku */
+.lb-sort-row { display: flex; gap: 6px; margin-bottom: 12px; }
+.lb-sort-btn {
+  padding: 5px 12px; border-radius: 20px; font-size: 0.72rem; font-weight: 600;
+  cursor: pointer; border: 1.5px solid var(--border); background: var(--surface);
+  color: var(--text-muted); font-family: Outfit, sans-serif; transition: all 0.15s;
+}
+.lb-sort-btn.active {
+  background: var(--gold); color: #000; border-color: var(--gold);
+}
+
 /* ── SKIP LINK ── */
 .skip-link {
   position: absolute;
@@ -3108,7 +3236,13 @@ html.logged-in .hero-v2 { display: none; }
 <div class="page" id="page-friends">
   <div class="page-inner">
     <div class="section-head">
-      <div class="section-title" data-cs="Přátelé <span>& žebříček</span>" data-en="Friends <span>& Leaderboard</span>">Přátelé <span>& žebříček</span></div>
+      <div class="section-title">Přátelé <span>& Partu</span></div>
+    </div>
+
+    <!-- ══ SEKCE TÝM ══ -->
+    <div class="team-wrap" id="team-wrap">
+      <!-- vyplní loadTeamSection() -->
+      <div style="text-align:center;padding:32px 0;color:var(--text-muted);font-size:0.82rem">Načítám tým…</div>
     </div>
 
     <div class="friends-layout">
@@ -6717,6 +6851,310 @@ async function loadProgressReferral() {
   } catch(e) { console.warn('loadProgressReferral:', e); }
 }
 
+// ════════════════════════════════════════════
+//  TÝMY / PARTU
+// ════════════════════════════════════════════
+
+// Stav
+let _teamData = null;       // aktuální tým uživatele
+let _lbSort   = 'streak';   // 'streak' | 'challenges' | 'activity'
+const TEAM_EMOJIS = ['🏆','🔥','⚡','💪','🚀','🧊','🦁','🐺','🎯','🛡️','🌟','💎'];
+
+// Generuj náhodný invite kód HOW-XXXX
+function genInviteCode() {
+  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  let code = 'HOW-';
+  for (let i = 0; i < 4; i++) code += chars[Math.floor(Math.random() * chars.length)];
+  return code;
+}
+
+// ── Hlavní loader ──
+async function loadTeamSection() {
+  const wrap = document.getElementById('team-wrap');
+  if (!wrap) return;
+  if (!isLoggedIn()) {
+    wrap.innerHTML = `<div class="team-onboarding">
+      <div class="team-onboarding-icon">🏆</div>
+      <div class="team-onboarding-title">Partu — výzva ve skupině</div>
+      <div class="team-onboarding-sub">Přihlas se a vytvoř nebo připoj se k týmu přátel.</div>
+    </div>`;
+    return;
+  }
+
+  try {
+    // Zjisti jestli uživatel má tým
+    const { data: membership } = await supa
+      .from('team_members').select('team_id, joined_at').eq('user_id', currentUser.id).single();
+
+    if (!membership) {
+      _teamData = null;
+      renderTeamOnboarding(wrap);
+    } else {
+      // Načti data týmu + členů
+      const { data: team } = await supa
+        .from('teams').select('*').eq('id', membership.team_id).single();
+      if (!team) { _teamData = null; renderTeamOnboarding(wrap); return; }
+
+      const { data: members } = await supa
+        .from('team_members').select('user_id, joined_at').eq('team_id', team.id);
+
+      const memberIds = (members || []).map(m => m.user_id);
+      const { data: profiles } = await supa
+        .from('profiles')
+        .select('id, nickname, avatar, streak, challenges_done, habit_streak, updated_at')
+        .in('id', memberIds);
+
+      _teamData = { team, members: profiles || [], myId: currentUser.id };
+      renderTeamCard(wrap);
+    }
+  } catch(e) {
+    console.warn('loadTeamSection:', e);
+    wrap.innerHTML = `<div style="color:var(--text-muted);font-size:0.82rem;padding:12px 0">Nepodařilo se načíst tým.</div>`;
+  }
+}
+
+// ── Onboarding (žádný tým) ──
+function renderTeamOnboarding(wrap) {
+  wrap.innerHTML = `
+    <div class="team-onboarding" id="team-onboarding">
+      <div class="team-onboarding-icon">🏆</div>
+      <div class="team-onboarding-title">Partu — výzva ve skupině</div>
+      <div class="team-onboarding-sub">Soutěž s přáteli, sleduj žebříček a motivujte se navzájem.</div>
+      <div class="team-onboarding-btns">
+        <button class="btn-team-create" onclick="showTeamCreateForm()">✨ Vytvořit partu</button>
+        <button class="btn-team-join"   onclick="showTeamJoinForm()">🔑 Připojit se kódem</button>
+      </div>
+    </div>
+    <div id="team-create-form" style="display:none"></div>
+    <div id="team-join-form"   style="display:none"></div>`;
+}
+
+// ── Formulář: Vytvoř tým ──
+let _selectedEmoji = '🏆';
+function showTeamCreateForm() {
+  _selectedEmoji = '🏆';
+  const f = document.getElementById('team-create-form');
+  if (!f) return;
+  document.getElementById('team-onboarding').style.display = 'none';
+  f.style.display = 'block';
+  f.innerHTML = `
+    <div class="team-form">
+      <div class="team-form-title">✨ Nová partu</div>
+      <div class="team-emoji-row" id="team-emoji-row">
+        ${TEAM_EMOJIS.map(e => `<button class="team-emoji-btn${e==='🏆'?' selected':''}" onclick="selectTeamEmoji('${e}',this)">${e}</button>`).join('')}
+      </div>
+      <input class="team-input" id="team-name-input" placeholder="Název party (např. Ranní vlci)" maxlength="32">
+      <div class="team-form-row">
+        <button class="btn-team-submit" onclick="createTeam()">Vytvořit</button>
+        <button class="btn-team-cancel" onclick="loadTeamSection()">Zrušit</button>
+      </div>
+      <div id="team-form-err" style="color:var(--red);font-size:0.78rem;margin-top:8px"></div>
+    </div>`;
+}
+
+function selectTeamEmoji(emoji, btn) {
+  _selectedEmoji = emoji;
+  document.querySelectorAll('.team-emoji-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+}
+
+async function createTeam() {
+  const nameEl = document.getElementById('team-name-input');
+  const errEl  = document.getElementById('team-form-err');
+  const name   = nameEl?.value.trim();
+  if (!name || name.length < 2) { if(errEl) errEl.textContent = 'Zadej název alespoň 2 znaky'; return; }
+
+  const btn = document.querySelector('#team-create-form .btn-team-submit');
+  if (btn) { btn.disabled = true; btn.textContent = '…'; }
+
+  try {
+    // Vytvoř tým
+    const code = genInviteCode();
+    const { data: team, error: teamErr } = await supa.from('teams').insert({
+      name, emoji: _selectedEmoji, invite_code: code, created_by: currentUser.id
+    }).select().single();
+
+    if (teamErr) {
+      // Kód kolize — zkus znovu s jiným kódem
+      if (teamErr.code === '23505') { if(btn){btn.disabled=false;btn.textContent='Vytvořit';} createTeam(); return; }
+      throw teamErr;
+    }
+
+    // Přidej sebe jako člena
+    await supa.from('team_members').insert({ user_id: currentUser.id, team_id: team.id });
+    showToast('🏆 Partu vytvořena!');
+    loadTeamSection();
+  } catch(e) {
+    if (errEl) errEl.textContent = 'Chyba: ' + e.message;
+    if (btn) { btn.disabled = false; btn.textContent = 'Vytvořit'; }
+  }
+}
+
+// ── Formulář: Připoj se kódem ──
+function showTeamJoinForm() {
+  const f = document.getElementById('team-join-form');
+  if (!f) return;
+  document.getElementById('team-onboarding').style.display = 'none';
+  f.style.display = 'block';
+  f.innerHTML = `
+    <div class="team-form">
+      <div class="team-form-title">🔑 Připojit se k partě</div>
+      <input class="team-input" id="team-code-input" placeholder="Invite kód (např. HOW-X7K2)" maxlength="8" style="text-transform:uppercase;letter-spacing:0.1em">
+      <div class="team-form-row">
+        <button class="btn-team-submit" onclick="joinTeam()">Připojit se</button>
+        <button class="btn-team-cancel" onclick="loadTeamSection()">Zrušit</button>
+      </div>
+      <div id="team-join-err" style="color:var(--red);font-size:0.78rem;margin-top:8px"></div>
+    </div>`;
+  // Auto-uppercase input
+  setTimeout(() => {
+    const inp = document.getElementById('team-code-input');
+    if (inp) inp.addEventListener('input', () => { inp.value = inp.value.toUpperCase(); });
+  }, 50);
+}
+
+async function joinTeam() {
+  const codeEl = document.getElementById('team-code-input');
+  const errEl  = document.getElementById('team-join-err');
+  const code   = codeEl?.value.trim().toUpperCase();
+  if (!code || code.length < 4) { if(errEl) errEl.textContent = 'Zadej platný kód'; return; }
+
+  const btn = document.querySelector('#team-join-form .btn-team-submit');
+  if (btn) { btn.disabled = true; btn.textContent = '…'; }
+
+  try {
+    // Najdi tým
+    const { data: team, error } = await supa.from('teams').select('*').eq('invite_code', code).single();
+    if (error || !team) { if(errEl) errEl.textContent = 'Kód nenalezen. Zkontroluj překlepy.'; if(btn){btn.disabled=false;btn.textContent='Připojit se';} return; }
+
+    // Připoj
+    const { error: memErr } = await supa.from('team_members').insert({ user_id: currentUser.id, team_id: team.id });
+    if (memErr) {
+      if (memErr.code === '23505') { if(errEl) errEl.textContent = 'Už jsi v jiném týmu.'; }
+      else { if(errEl) errEl.textContent = 'Chyba: ' + memErr.message; }
+      if(btn){btn.disabled=false;btn.textContent='Připojit se';}
+      return;
+    }
+    showToast(`🎉 Připojen/a k partě ${team.emoji} ${team.name}!`);
+    loadTeamSection();
+  } catch(e) {
+    if (errEl) errEl.textContent = 'Chyba: ' + e.message;
+    if (btn) { btn.disabled = false; btn.textContent = 'Připojit se'; }
+  }
+}
+
+// ── Karta týmu ──
+function renderTeamCard(wrap) {
+  if (!_teamData) return;
+  const { team, members, myId } = _teamData;
+  const isCaptain = team.created_by === myId;
+
+  wrap.innerHTML = `
+    <div class="team-card">
+      <div class="team-card-header">
+        <div class="team-card-emoji">${team.emoji}</div>
+        <div>
+          <div class="team-card-name">${escapeHtml(team.name)}</div>
+          <div class="team-card-meta">${members.length} ${members.length===1?'člen':members.length<5?'členové':'členů'} · ${isCaptain?'Ty jsi kapitán':'Člen'}</div>
+        </div>
+      </div>
+      <div style="font-size:0.74rem;color:var(--text-muted);margin-bottom:6px">📨 Pozvi přátele — pošli jim tento kód:</div>
+      <div class="team-invite-row">
+        <div class="team-invite-code">${team.invite_code}</div>
+        <button class="btn-copy-invite" onclick="copyTeamInvite('${team.invite_code}','${escapeHtml(team.name)}')">Kopírovat</button>
+      </div>
+      <div class="team-invite-hint">Kód stačí zkopírovat a poslat na WhatsApp nebo Telegram.</div>
+
+      <div class="team-leaderboard-title">🏅 Žebříček party</div>
+      <div class="lb-sort-row">
+        <button class="lb-sort-btn${_lbSort==='streak'?' active':''}"     onclick="setLbSort('streak')">🔥 Streak</button>
+        <button class="lb-sort-btn${_lbSort==='challenges'?' active':''}" onclick="setLbSort('challenges')">✅ Výzvy</button>
+        <button class="lb-sort-btn${_lbSort==='activity'?' active':''}"   onclick="setLbSort('activity')">💧 Návyky</button>
+      </div>
+      <div id="team-lb-list">${renderLeaderboard(members, myId)}</div>
+
+      <button class="btn-leave-team" onclick="leaveTeam()">← Opustit partu</button>
+    </div>`;
+}
+
+function renderLeaderboard(members, myId) {
+  const sorted = [...members].sort((a, b) => {
+    if (_lbSort === 'streak')      return (b.streak||0) - (a.streak||0);
+    if (_lbSort === 'challenges')  return (b.challenges_done||0) - (a.challenges_done||0);
+    return (b.habit_streak||0) - (a.habit_streak||0);
+  });
+
+  const medals = ['🥇','🥈','🥉'];
+  const rankCls = ['gold','silver','bronze'];
+
+  return sorted.map((m, i) => {
+    const isMe = m.id === myId;
+    const av = m.avatar;
+    let avHtml;
+    if (av && av.startsWith('data:')) {
+      avHtml = `<div class="team-lb-avatar"><img src="${av}" alt=""></div>`;
+    } else {
+      avHtml = `<div class="team-lb-avatar">${av || '🏃'}</div>`;
+    }
+    const streakVal     = m.streak || 0;
+    const challengeVal  = m.challenges_done || 0;
+    const activityVal   = m.habit_streak || 0;
+    const mainVal = _lbSort === 'streak' ? `${streakVal}🔥` : _lbSort === 'challenges' ? `${challengeVal} ✅` : `${activityVal}💧`;
+    const subStats = _lbSort === 'streak'
+      ? `${challengeVal} výzev · ${activityVal} návyk streak`
+      : _lbSort === 'challenges'
+      ? `${streakVal}🔥 streak · ${activityVal}💧 návyky`
+      : `${streakVal}🔥 streak · ${challengeVal} výzev`;
+
+    return `<div class="team-lb-row${isMe?' me':''}">
+      <div class="team-lb-rank ${rankCls[i]||''}">${medals[i]||i+1}</div>
+      ${avHtml}
+      <div class="team-lb-info">
+        <div class="team-lb-name">@${escapeHtml(m.nickname||'?')}${isMe?' (ty)':''}</div>
+        <div class="team-lb-stats">${subStats}</div>
+      </div>
+      <div class="team-lb-streak">${mainVal}</div>
+    </div>`;
+  }).join('');
+}
+
+function setLbSort(sort) {
+  _lbSort = sort;
+  if (_teamData) {
+    const listEl = document.getElementById('team-lb-list');
+    if (listEl) listEl.innerHTML = renderLeaderboard(_teamData.members, _teamData.myId);
+  }
+  // Aktualizuj aktivní tlačítka
+  document.querySelectorAll('.lb-sort-btn').forEach(b => {
+    b.classList.toggle('active',
+      (sort==='streak' && b.textContent.includes('Streak')) ||
+      (sort==='challenges' && b.textContent.includes('Výzvy')) ||
+      (sort==='activity' && b.textContent.includes('Návyky'))
+    );
+  });
+}
+
+function copyTeamInvite(code, name) {
+  const text = `Připoj se k mé partě "${name}" na Habits of Winners!\nKód: ${code}\nhttps://habitsofwinners.cz`;
+  navigator.clipboard.writeText(text).then(() => showToast('📋 Odkaz zkopírován!')).catch(() => {
+    // Fallback
+    const el = document.createElement('textarea');
+    el.value = text; document.body.appendChild(el); el.select();
+    document.execCommand('copy'); document.body.removeChild(el);
+    showToast('📋 Zkopírováno!');
+  });
+}
+
+async function leaveTeam() {
+  if (!confirm('Opravdu chceš opustit partu?')) return;
+  try {
+    await supa.from('team_members').delete().eq('user_id', currentUser.id);
+    _teamData = null;
+    showToast('Opustil/a jsi partu');
+    loadTeamSection();
+  } catch(e) { showToast('Chyba: ' + e.message); }
+}
+
 function init() {
   applyTheme(); applyLang();
   checkUrlParams();
@@ -6774,7 +7212,7 @@ function showPage(id) {
   }
   if(id==='challenges') { loadChallengeRatingsForCards(); renderDailyChallenges(); renderCommunityChallenge(); loadChallengeVoting(); }
   if(id==='allhabits') { loadHabitFavs(); }
-  if(id==='friends') { syncProfileToSupabase(); loadFriends(); }
+  if(id==='friends') { syncProfileToSupabase(); loadFriends(); loadTeamSection(); }
   if(id==='progress') { loadProgress(); }
   if(id==='settings' && isLoggedIn()) {
     loadUserSettings().then(() => {
@@ -7647,480 +8085,4 @@ function renderHabits() {
     const displayName = (h.emoji && rawName.startsWith(h.emoji)) ? rawName.slice(h.emoji.length).trim() : rawName;
     const safeId = h.id;
 
-    return `<div class="habit-card" data-habit-id="${safeId}">
-      <button class="habit-check-btn${done?' checked':''}" data-action="toggle" data-id="${safeId}">${done?'✓':''}</button>
-      <div class="habit-info">
-        <div class="habit-name">${h.emoji ? h.emoji+' ' : ''}${displayName}</div>
-        <div class="habit-streak-line">
-          <span class="habit-streak-num">🔥 ${hStreak}</span>
-          <span class="habit-streak-label">${habitStreakLabel(hStreak)}</span>
-          <div class="habit-week" style="margin-left:12px">${week}</div>
-        </div>
-      </div>
-      <button class="habit-remove-btn" aria-label="Odebrat návyk" data-action="remove" data-id="${safeId}" style="background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:1.4rem;padding:10px 14px;line-height:1;flex-shrink:0">×</button>
-    </div>`;
-  }).join('') + `<div style="margin-top:14px;text-align:center"><button onclick="showPage('allhabits')" style="padding:9px 22px;border-radius:100px;background:transparent;border:1.5px solid var(--gold-dim);color:var(--gold);font-size:0.85rem;font-weight:600;cursor:pointer;font-family:Outfit,sans-serif;transition:all 0.2s" onmouseover="this.style.background='var(--gold)';this.style.color='#000'" onmouseout="this.style.background='transparent';this.style.color='var(--gold)'">${'➕ Další návyky'}</button></div>`;
-
-  // Event delegation - jeden listener pro všechny akce
-  list.onclick = function(e) {
-    const btn = e.target.closest('[data-action]');
-    if (!btn) return;
-    e.stopPropagation();
-    const action = btn.dataset.action;
-    const id = btn.dataset.id;
-    if (action === 'toggle') toggleHabit(id);
-    if (action === 'remove') askConfirmRemoveHabit(id);
-  };
-
-  renderHeatmap();
-  renderBadges();
-  renderActivityRings();
-}
-
-
-function toggleHabit(hid) {
-  const todayStr = new Date().toDateString();
-  if(!habitLog[todayStr]) habitLog[todayStr] = [];
-  const idx = habitLog[todayStr].indexOf(hid);
-  if(idx===-1){
-    habitLog[todayStr].push(hid);
-    // check perfect day streak
-    checkHabitStreak();
-    showToast('✅ Návyk splněn!');
-  } else {
-    habitLog[todayStr].splice(idx,1);
-  }
-  localStorage.setItem('how_habitlog', JSON.stringify(habitLog));
-  _habitsMutex = true;
-  clearTimeout(window._mutexTimer);
-  window._mutexTimer = setTimeout(() => { _habitsMutex = false; }, 10000);
-  renderHabits();
-  renderActivityRings();
-  scheduleSyncToCloud();
-}
-
-function checkHabitStreak() {
-  let s = 0;
-  for(let i=0;i<365;i++){
-    const d = new Date(Date.now()-i*86400000).toDateString();
-    const log = habitLog[d]||[];
-    if(log.length >= habits.length && habits.length > 0) s++;
-    else break;
-  }
-  habitStreak = s;
-  localStorage.setItem('how_hstreak', s);
-  scheduleSyncToCloud();
-}
-
-function addHabit() {
-  const input = document.getElementById('new-habit-input');
-  const name = input.value.trim();
-  if (!name) return;
-  if (habits.some(h => h.name === name)) {
-    showToast('Již v trackeru');
-    return;
-  }
-  habits.push({id:'h_'+Date.now(), name, nameEn:name, emoji:'⭐'});
-  input.value = '';
-  saveHabits();
-  showToast('✅ Návyk přidán!');
-}
-
-function addHabitFromAllhabits() {
-  const input = document.getElementById('allhabits-custom-input');
-  if (!input) return;
-  const name = input.value.trim();
-  if (!name) return;
-  if (habits.some(h => h.name === name)) {
-    showToast('Již v trackeru');
-    return;
-  }
-  habits.push({id:'h_'+Date.now(), name, nameEn:name, emoji:'⭐'});
-  input.value = '';
-  saveHabits();
-  showToast('✅ Návyk přidán! Najdeš ho v záložce Návyky.');
-}
-
-// ── Potvrzení smazání návyku ──
-let _habitToRemove = null;
-function askConfirmRemoveHabit(id) {
-  const habit = habits.find(h => h.id === id);
-  if (!habit) return;
-  _habitToRemove = id;
-  // Název návyku
-  const nameEl = document.getElementById('confirm-remove-habit-name');
-  if (nameEl) nameEl.textContent = habit.name;
-  // Texty dle jazyka
-  const titleEl = document.getElementById('confirm-remove-habit-title');
-  if (titleEl) titleEl.textContent = 'Odstranit návyk?';
-  const subEl = document.getElementById('confirm-remove-habit-sub');
-  if (subEl) subEl.textContent = 'Tato akce smaže návyk i celou historii. Nelze vrátit zpět.';
-  const noBtn = document.getElementById('confirm-remove-no');
-  if (noBtn) noBtn.textContent = 'Ne, ponechat';
-  const yesBtn = document.getElementById('confirm-remove-yes');
-  if (yesBtn) yesBtn.textContent = 'Ano, smazat';
-  document.getElementById('confirm-remove-habit-overlay').classList.add('open');
-}
-function closeConfirmRemoveHabit() {
-  _habitToRemove = null;
-  document.getElementById('confirm-remove-habit-overlay').classList.remove('open');
-}
-function confirmRemoveHabit() {
-  if (_habitToRemove) removeHabit(_habitToRemove);
-  closeConfirmRemoveHabit();
-}
-
-function removeHabit(id) {
-  // Najdi název návyku před odebráním aby šlo obnovit tlačítko
-  const removed = habits.find(h => h.id === id);
-  habits = habits.filter(h => h.id !== id);
-  saveHabits();
-  // Obnov tlačítko "+ Přidat do trackeru" na stránce Návyky
-  if (removed) {
-    document.querySelectorAll('.btn-add-to-tracker').forEach(btn => {
-      const onclickAttr = btn.getAttribute('onclick') || '';
-      if (onclickAttr.includes(removed.name) || onclickAttr.includes(removed.nameEn || '')) {
-        btn.textContent = '+ Přidat do trackeru';
-        btn.classList.remove('added');
-        // Obnov původní onclick
-        const match = onclickAttr.match(/addHabitFromList\(this,'([^']+)','([^']+)'\)/);
-        if (!match) {
-          // Zkus obnovit přes data atributy
-          btn.onclick = function(e) {
-            e.stopPropagation();
-            addHabitFromList(this, removed.name, removed.nameEn || removed.name);
-          };
-        }
-      }
-    });
-  }
-}
-
-// ════════════════════════════════════════════
-//  HEATMAP
-// ════════════════════════════════════════════
-function renderHeatmap() {
-  const grid = document.getElementById('heatmap');
-  if (!isLoggedIn()) {
-    // Demo pattern pro nepřihlášené — ukazuje jak bude mřížka vypadat
-    const demo = [0,1,1,2,1,3,3,2,1,1,3,3,2,1,3,3,3,2,1,3,3,2,3,3,1,2,3,0];
-    grid.innerHTML = demo.map(v => {
-      const cls = 'hm-cell' + (v===3?' l3':v===2?' l2':v===1?' l1':'');
-      return `<div class="${cls}" aria-hidden="true"></div>`;
-    }).join('');
-    return;
-  }
-  const cells = Array.from({length:28},(_,i)=>{
-    const d = new Date(Date.now()-(27-i)*86400000).toDateString();
-    const log = habitLog[d]||[];
-    const ratio = habits.length>0 ? log.length/habits.length : 0;
-    let cls = 'hm-cell';
-    if(ratio>=1) cls+=' l3';
-    else if(ratio>=0.5) cls+=' l2';
-    else if(ratio>0) cls+=' l1';
-    return `<div class="${cls}" title="${d}: ${log.length}/${habits.length}"></div>`;
-  }).join('');
-  grid.innerHTML = cells;
-}
-
-// ════════════════════════════════════════════
-//  BADGES
-// ════════════════════════════════════════════
-function renderBadges() {
-  const grid = document.getElementById('badges-grid');
-  if (!isLoggedIn()) {
-    const demoBadges = [
-      {emoji:'🌱',name:'První krok'},{emoji:'🔥',name:'3 dny v řadě'},
-      {emoji:'⚡',name:'10 výzev'},{emoji:'💎',name:'7 dní v řadě'},
-      {emoji:'🏆',name:'25 výzev'},{emoji:'👑',name:'50 výzev'}
-    ];
-    grid.innerHTML =
-      `<div style="grid-column:1/-1;text-align:center;padding:4px 4px 10px;font-size:0.72rem;color:var(--gold);font-weight:600;letter-spacing:0.01em">
-        🔒 Náhled — přihlas se a začni sbírat své
-      </div>` +
-      demoBadges.map(b => `<div class="badge-item locked">
-        <span class="badge-emoji">${b.emoji}</span>
-        <div class="badge-name">${b.name}</div>
-      </div>`).join('');
-    return;
-  }
-  const stats = { done: completed.length, streak, habitStreak };
-  grid.innerHTML = BADGES.map(b => {
-    const unlocked = b.req(stats);
-    return `<div class="badge-item${unlocked?'':' locked'}">
-      ${unlocked?'<div class="badge-unlocked-tag">✓</div>':''}
-      <span class="badge-emoji">${b.emoji}</span>
-      <div class="badge-name">${b.name}</div>
-    </div>`;
-  }).join('');
-}
-
-// ════════════════════════════════════════════
-//  AI
-// ════════════════════════════════════════════
-function getKey() {
-  if(apiKey) return apiKey;
-  document.getElementById('overlay').classList.add('open');
-  return null;
-}
-function saveKey() {
-  apiKey = document.getElementById('api-input').value.trim();
-  if(apiKey){ localStorage.setItem('how_api',apiKey); document.getElementById('overlay').classList.remove('open'); showToast('API klíč uložen ✓'); }
-}
-function closeModal() { document.getElementById('overlay').classList.remove('open'); }
-
-async function callClaude(prompt) {
-  const key = getKey(); if(!key) return null;
-  const res = await fetch('https://api.anthropic.com/v1/messages',{
-    method:'POST',
-    headers:{'Content-Type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
-    body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:300,messages:[{role:'user',content:prompt}]})
-  });
-  const data = await res.json();
-  if(data.error) throw new Error(data.error.message);
-  return data.content[0].text;
-}
-
-async function getAIHomeChallenge() {
-  if(!document.getElementById('ai-home-box')) return;
-  const box = document.getElementById('ai-home-box');
-  const txt = document.getElementById('ai-home-text');
-  box.classList.add('show');
-  txt.innerHTML = '<span class="spin"></span>';
-  try {
-    const prompt = `Jsi kouč osobního rozvoje. Navrhni JEDNU konkrétní výzvu z komfortní zóny na dnešní den. Uživatel splnil ${completed.length} výzev. Buď konkrétní, přímý, motivující. Max 2-3 věty. Odpověz česky.`;
-    const r = await callClaude(prompt);
-    if(r) txt.textContent = r;
-  } catch(e) { txt.textContent = 'Chyba připojení. Zkontroluj API klíč.'; }
-}
-
-async function getAISuggest() {
-  if(!document.getElementById('ai-suggest-box')) return;
-  const box = document.getElementById('ai-suggest-box');
-  const txt = document.getElementById('ai-suggest-text');
-  box.classList.add('show');
-  txt.innerHTML = '<span class="spin"></span>';
-  try {
-    const cats = [...new Set(CHALLENGES.filter(c=>!completed.includes(c.id)).map(c=>c.cat))].join(', ');
-    const prompt = `Kouč osobního rozvoje: Uživatel splnil ${completed.length} výzev. Zbývající kategorie: ${cats}. Doporuč JEDNU kategorii na dnešek a proč. Motivující, konkrétní. 2 věty. Česky.`;
-    const r = await callClaude(prompt);
-    if(r) txt.textContent = r;
-  } catch(e) { txt.textContent = 'Chyba. Zkontroluj API klíč.'; }
-}
-
-// ════════════════════════════════════════════
-//  TOAST
-// ════════════════════════════════════════════
-// ════════════════════════════════════════════
-//  STREAK SHARE CARD
-// ════════════════════════════════════════════
-function openShareModal() {
-  if (!isLoggedIn()) return requireAuth('Přihlas se a sdílej svůj streak!');
-  generateStreakCard();
-  document.getElementById('share-modal-overlay').classList.add('open');
-  // Zobraz native share pokud je dostupné
-  if (navigator.share) document.getElementById('share-btn-native').style.display = '';
-}
-
-function closeShareModal() {
-  document.getElementById('share-modal-overlay').classList.remove('open');
-}
-
-function generateStreakCard() {
-  const canvas = document.getElementById('streak-card-canvas');
-  const ctx    = canvas.getContext('2d');
-  const W = 1080, H = 1080;
-  canvas.width = W; canvas.height = H;
-
-  // Pozadí
-  ctx.fillStyle = '#0E0E0E';
-  ctx.fillRect(0, 0, W, H);
-
-  // Jemný gradient overlay
-  const grad = ctx.createRadialGradient(W/2, H*0.4, 0, W/2, H*0.4, W*0.7);
-  grad.addColorStop(0, 'rgba(201,169,110,0.12)');
-  grad.addColorStop(1, 'rgba(0,0,0,0)');
-  ctx.fillStyle = grad;
-  ctx.fillRect(0, 0, W, H);
-
-  // Zlatý rámeček
-  ctx.strokeStyle = 'rgba(201,169,110,0.5)';
-  ctx.lineWidth = 6;
-  _roundRect(ctx, 32, 32, W-64, H-64, 28);
-  ctx.stroke();
-
-  // Vnitřní tenký rámeček
-  ctx.strokeStyle = 'rgba(201,169,110,0.18)';
-  ctx.lineWidth = 2;
-  _roundRect(ctx, 50, 50, W-100, H-100, 20);
-  ctx.stroke();
-
-  // Logo text
-  ctx.fillStyle = '#C9A96E';
-  ctx.font = '500 38px "Outfit", Arial, sans-serif';
-  ctx.textAlign = 'center';
-  ctx.fillText('HABITS OF WINNERS', W/2, 130);
-
-  // Linka pod logem
-  ctx.strokeStyle = 'rgba(201,169,110,0.3)';
-  ctx.lineWidth = 1.5;
-  ctx.beginPath(); ctx.moveTo(W/2-180, 150); ctx.lineTo(W/2+180, 150); ctx.stroke();
-
-  // Milestone emoji podle streaku
-  const milestoneEmoji = streak >= 100 ? '💎' : streak >= 30 ? '🏆' : streak >= 7 ? '🔥' : '⚡';
-  ctx.font = '180px serif';
-  ctx.textAlign = 'center';
-  ctx.fillText(milestoneEmoji, W/2, 460);
-
-  // Velké číslo streaku – zlaté se stínem
-  ctx.shadowColor = 'rgba(201,169,110,0.5)';
-  ctx.shadowBlur  = 40;
-  ctx.fillStyle   = '#C9A96E';
-  ctx.font        = 'bold 260px "Outfit", Arial Black, sans-serif';
-  ctx.textAlign   = 'center';
-  ctx.fillText(String(streak), W/2, 710);
-  ctx.shadowBlur  = 0;
-
-  // Label "dní v řadě"
-  ctx.fillStyle = '#F2EFE9';
-  ctx.font      = '500 58px "Outfit", Arial, sans-serif';
-  ctx.fillText(pluralCS(streak, 'den v řadě', 'dny v řadě', 'dní v řadě'), W/2, 800);
-
-  // Milník text
-  const milestoneText = streak >= 100 ? '💎 Legenda!' : streak >= 30 ? '🏆 Měsíc bez zastavení!' : streak >= 14 ? '🔥 Dva týdny síly!' : streak >= 7 ? '🔥 Týden splněno!' : '';
-  if (milestoneText) {
-    ctx.fillStyle = 'rgba(201,169,110,0.75)';
-    ctx.font      = '400 36px "Outfit", Arial, sans-serif';
-    ctx.fillText(milestoneText, W/2, 860);
-  }
-
-  // Nickname
-  const nick = currentUser?.user_metadata?.nickname || currentUser?.email?.split('@')[0] || '';
-  if (nick) {
-    ctx.fillStyle = 'rgba(242,239,233,0.45)';
-    ctx.font      = '300 38px "Outfit", Arial, sans-serif';
-    ctx.fillText('@' + nick, W/2, 940);
-  }
-
-  // URL
-  ctx.fillStyle = 'rgba(201,169,110,0.55)';
-  ctx.font      = '400 34px "Outfit", Arial, sans-serif';
-  ctx.fillText('habitsofwinners.cz', W/2, 1010);
-}
-
-function _roundRect(ctx, x, y, w, h, r) {
-  ctx.beginPath();
-  ctx.moveTo(x + r, y);
-  ctx.lineTo(x + w - r, y);
-  ctx.arcTo(x+w, y, x+w, y+r, r);
-  ctx.lineTo(x+w, y+h-r);
-  ctx.arcTo(x+w, y+h, x+w-r, y+h, r);
-  ctx.lineTo(x+r, y+h);
-  ctx.arcTo(x, y+h, x, y+h-r, r);
-  ctx.lineTo(x, y+r);
-  ctx.arcTo(x, y, x+r, y, r);
-  ctx.closePath();
-}
-
-function downloadShareCard() {
-  const canvas = document.getElementById('streak-card-canvas');
-  const a = document.createElement('a');
-  a.download = 'howstreak_' + streak + 'dni.png';
-  a.href = canvas.toDataURL('image/png');
-  a.click();
-  showToast('📸 Obrázek stažen! Sdílej to!');
-}
-
-async function nativeShare() {
-  try {
-    const canvas = document.getElementById('streak-card-canvas');
-    const blob   = await new Promise(res => canvas.toBlob(res, 'image/png'));
-    const file   = new File([blob], 'streak.png', { type: 'image/png' });
-    await navigator.share({
-      title: 'Habits of Winners — ' + streak + ' ' + pluralCS(streak,'den','dny','dní') + ' v řadě!',
-      text : 'Mám streak ' + streak + ' dní na habitsofwinners.cz. Zvládneš to taky? 💪',
-      files: [file]
-    });
-  } catch(e) {
-    // fallback — stáhni
-    downloadShareCard();
-  }
-}
-
-function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg; t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'), 2500);
-}
-
-// handle enter on habit input
-document.addEventListener('DOMContentLoaded', () => {
-  document.getElementById('new-habit-input')?.addEventListener('keydown', e => { if(e.key==='Enter') addHabit(); });
-  document.getElementById('friend-search-input')?.addEventListener('keydown', e => { if(e.key==='Enter') searchFriend(); });
-document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') {
-    document.getElementById('ch-overlay')?.classList.remove('open');
-    document.body.style.overflow = '';
-    currentDetailId = null;
-  }
-});
-});
-
-init();
-
-// ═══════════════════════════════
-// DIAGNOSTIKA - dočasný debug panel
-// ═══════════════════════════════
-async function runDiagnostics() {
-  const lines = [];
-  lines.push('=== DIAGNOSTIKA ===');
-  lines.push('Přihlášen: ' + (isLoggedIn() ? currentUser.email : 'NE'));
-  lines.push('habits[] v paměti: ' + habits.length);
-  lines.push('habits v localStorage: ' + JSON.parse(localStorage.getItem('how_habits')||'[]').length);
-  
-  if (isLoggedIn()) {
-    lines.push('Testuji Supabase user_data...');
-    try {
-      const { data, error } = await supa.from('user_data')
-        .select('id, habits, updated_at')
-        .eq('id', currentUser.id)
-        .single();
-      if (error) {
-        lines.push('❌ READ ERROR: ' + error.message + ' (code: ' + error.code + ')');
-      } else if (!data) {
-        lines.push('❌ Žádný záznam v user_data pro tohoto uživatele');
-      } else {
-        lines.push('✅ user_data nalezena');
-        lines.push('habits v DB: ' + 'data.habits ? data.habits.length : 0');
-        lines.push('updated_at: ' + data.updated_at);
-      }
-    } catch(e) {
-      lines.push('❌ EXCEPTION: ' + e.message);
-    }
-    
-    lines.push('Testuji zápis...');
-    try {
-      const { error: we } = await supa.from('user_data').upsert({
-        id: currentUser.id,
-        habits: habits,
-        completed: completed,
-        streak: streak,
-        last_date: lastDate,
-        habit_log: habitLog,
-        habit_streak: habitStreak,
-        updated_at: new Date().toISOString()
-      }, { onConflict: 'id' });
-      if (we) lines.push('❌ WRITE ERROR: ' + we.message + ' (code: ' + we.code + ')');
-      else lines.push('✅ Zápis OK');
-    } catch(e) {
-      lines.push('❌ WRITE EXCEPTION: ' + e.message);
-    }
-  }
-  
-  alert(lines.join('\n'));
-}
-
-</script>
-
-<script>
-// ══════════════════════════════�
+    return `<div class="habit-card" data-habit-id="${saf
