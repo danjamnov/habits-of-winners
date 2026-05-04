@@ -992,36 +992,6 @@ nav {
 .friend-badges { display: flex; gap: 4px; flex-wrap: wrap; margin-top: 8px; }
 .fbadge { font-size: 1rem; }
 
-/* ── BUDDY CARD ── */
-.buddy-card {
-  background: linear-gradient(135deg, rgba(99,102,241,0.08), rgba(251,191,36,0.06));
-  border: 1.5px solid rgba(99,102,241,0.35);
-  border-radius: 18px; padding: 16px 18px;
-  margin-bottom: 14px; position: relative;
-}
-.buddy-card-header { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
-.buddy-label { font-size: 0.68rem; font-weight: 700; letter-spacing: 1px; color: #818cf8; text-transform: uppercase; margin-bottom: 2px; }
-.buddy-name { font-size: 1rem; font-weight: 700; color: var(--text); }
-.buddy-status-badge { margin-left: auto; font-size: 0.72rem; font-weight: 600; padding: 3px 10px; border-radius: 100px; }
-.buddy-status-done   { background: rgba(74,222,128,0.15); color: #4ade80; border: 1px solid rgba(74,222,128,0.3); }
-.buddy-status-active { background: rgba(251,191,36,0.12); color: var(--gold); border: 1px solid var(--gold-dim); }
-.buddy-status-miss   { background: rgba(248,113,113,0.12); color: #f87171; border: 1px solid rgba(248,113,113,0.3); }
-.buddy-progress-row  { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
-.buddy-progress-bar  { flex: 1; height: 6px; background: var(--border); border-radius: 100px; overflow: hidden; }
-.buddy-progress-fill { height: 100%; border-radius: 100px; background: #818cf8; transition: width 0.5s ease; }
-.buddy-progress-txt  { font-size: 0.78rem; color: var(--text-muted); white-space: nowrap; }
-.buddy-combo-row     { display: flex; align-items: center; justify-content: space-between; }
-.buddy-combo-num     { font-size: 0.82rem; color: var(--gold); font-weight: 700; }
-.buddy-combo-label   { font-size: 0.72rem; color: var(--text-muted); }
-.buddy-manage-btn    { font-size: 0.72rem; color: #818cf8; background: none; border: none; cursor: pointer; padding: 0; font-family: Outfit, sans-serif; text-decoration: underline; text-underline-offset: 2px; }
-.buddy-section       { margin-bottom: 20px; }
-.buddy-req-card      { background: var(--surface2); border: 1.5px solid rgba(99,102,241,0.3); border-radius: 14px; padding: 14px 16px; display: flex; align-items: center; gap: 12px; }
-.btn-buddy-req       { padding: 6px 16px; border-radius: 100px; font-size: 0.8rem; font-weight: 600; cursor: pointer; border: none; font-family: Outfit, sans-serif; background: #818cf8; color: #fff; transition: opacity 0.2s; }
-.btn-buddy-req:hover { opacity: 0.85; }
-.btn-buddy-dissolve  { padding: 5px 14px; border-radius: 100px; font-size: 0.75rem; font-weight: 600; cursor: pointer; font-family: Outfit, sans-serif; background: transparent; border: 1px solid var(--border); color: var(--text-muted); transition: all 0.2s; }
-.btn-buddy-dissolve:hover { border-color: #f87171; color: #f87171; }
-.btn-send-buddy      { margin-top: 8px; padding: 6px 16px; border-radius: 100px; font-size: 0.78rem; font-weight: 600; cursor: pointer; border: 1.5px solid rgba(99,102,241,0.5); color: #818cf8; background: transparent; font-family: Outfit, sans-serif; transition: all 0.2s; display: block; width: 100%; }
-.btn-send-buddy:hover { background: rgba(99,102,241,0.12); }
 
 .empty-state { text-align: center; padding: 36px 20px; color: var(--text-muted); font-size: 0.88rem; line-height: 1.6; }
 .empty-state .es-icon { font-size: 2.2rem; margin-bottom: 8px; }
@@ -3281,7 +3251,6 @@ html.logged-in .hero-v2 { display: none; }
 
         <div class="habits-layout">
       <div>
-        <div id="buddy-card-wrap"></div>
         <div class="habit-list" id="habit-list"></div>
       </div>
 
@@ -3582,9 +3551,6 @@ html.logged-in .hero-v2 { display: none; }
     </div>
 
     <div class="friends-layout">
-
-      <!-- Buddy sekce -->
-      <div class="buddy-section" id="buddy-section" style="display:none"></div>
 
       <!-- Žádosti o přátelství -->
       <div class="requests-section" id="requests-section" style="display:none">
@@ -4897,7 +4863,6 @@ let habits = JSON.parse(localStorage.getItem('how_habits') || JSON.stringify('DE
 let habitLog = JSON.parse(localStorage.getItem('how_habitlog') || '{}'); // {date: [habitId,...]}
 let habitStreak = parseInt(localStorage.getItem('how_hstreak') || '0');
 let streakShield = localStorage.getItem('how_streak_shield') === '1'; // Aktivní štít po 30 dnech
-let myBuddy = null; // { id, partner_id, partner_nickname, partner_avatar, partner_done, combo_streak, status }
 let apiKey = localStorage.getItem('how_api') || '';
 let catFilter = 'all';
 let showCompletedOnly = false;
@@ -5404,8 +5369,6 @@ async function loadUserData() {
     // Cloud data načtena - překresli vše
     renderHabits(); renderDailyChallenges(); updateSettingsMenu();
   }
-  // Načti buddy data
-  loadBuddy();
 }
 
 function loadUserDataFromLocalStorage() {
@@ -6582,8 +6545,6 @@ async function syncProfileToSupabase() {
     badges: unlockedBadges,
     avatar: avatarData !== null ? avatarData : (currentSettings._avatar || null),
     settings,
-    today_habits_done: todayHabits,
-    today_date: todayStr,
     updated_at: new Date().toISOString()
   }, { onConflict: 'id' });
 
@@ -6741,8 +6702,6 @@ async function loadFriends() {
   const friendList = document.getElementById('friends-list');
   const friendCount = document.getElementById('friends-count');
 
-  // Buddy sekci zobrazíme vždy — bez ohledu na to, zda má uživatel přátele
-  renderBuddySection();
 
   if (!friendships || friendships.length === 0) {
     friendList.innerHTML = '<div class="empty-state"><div class="es-icon">🤝</div><div>' + ('Zatím žádní přátelé.<br>Vyhledej uživatele níže!') + '</div></div>';
@@ -6834,7 +6793,6 @@ async function loadFriends() {
       </div>
       ${badgesHtml ? `<div class="friend-badges">${badgesHtml}</div>` : ''}
       ${p.last_challenge ? `<div style="margin-top:8px;font-size:0.75rem;color:var(--text-muted)">💪 ${'Poslední'}: <span style="color:var(--text)">${p.last_challenge}</span></div>` : ''}
-      ${!myBuddy ? `<button class="btn-send-buddy" onclick="sendBuddyRequest('${p.id}','${p.nickname}')">👥 Vyzvat jako Buddy</button>` : ''}
     </div>`;
   }).join('');
 }
@@ -6852,244 +6810,6 @@ async function respondFriendship(friendshipId, status, nickname) {
     showToast(`Žádost od ${nickname} odmítnuta`);
   }
   loadFriends();
-}
-
-// ════════════════════════════════════════════
-//  BUDDY SYSTÉM
-// ════════════════════════════════════════════
-async function loadBuddy() {
-  if (!currentUser || currentUser.email === 'host@preview.cz') return;
-  const uid = currentUser.id;
-  const { data } = await supa.from('buddies')
-    .select('*')
-    .or(`requester_id.eq.${uid},receiver_id.eq.${uid}`)
-    .in('status', ['pending','accepted'])
-    .order('created_at', { ascending: false })
-    .limit(1)
-    .maybeSingle();
-  myBuddy = data || null;
-  renderBuddyCard();
-}
-
-function renderBuddyCard() {
-  const wrap = document.getElementById('buddy-card-wrap');
-  if (!wrap) return;
-  if (!myBuddy || myBuddy.status !== 'accepted') {
-    wrap.innerHTML = '';
-    return;
-  }
-  const uid = currentUser?.id;
-  const partnerId = myBuddy.requester_id === uid ? myBuddy.receiver_id : myBuddy.requester_id;
-  // Fetch partner info from profiles
-  supa.from('profiles').select('nickname,avatar,today_habits_done,today_date,habit_streak').eq('id', partnerId).maybeSingle().then(({ data: p }) => {
-    if (!p) return;
-    const totalHabits = habits.length || 1;
-    const todayStr = new Date().toDateString();
-    const partnerDoneToday = p.today_date === todayStr ? (p.today_habits_done || 0) : 0;
-    const myDoneToday = (habitLog[todayStr] || []).length;
-    const partnerPct = Math.round(partnerDoneToday / totalHabits * 100);
-    const myPct = Math.round(myDoneToday / totalHabits * 100);
-    const partnerDone = partnerPct >= 100;
-    const myDone = myPct >= 100;
-    const statusCls = partnerDone ? 'buddy-status-done' : 'buddy-status-active';
-    const statusTxt = partnerDone ? '✅ Hotovo' : '⏳ V průběhu';
-    const myNick = currentUser.user_metadata?.nickname || currentUser.email.split('@')[0];
-
-    wrap.innerHTML = `<div class="buddy-card">
-      <div class="buddy-card-header">
-        <div>
-          <div class="buddy-label">👥 Buddy</div>
-          <div class="buddy-name">${p.nickname}</div>
-        </div>
-        <span class="buddy-status-badge ${statusCls}">${statusTxt}</span>
-      </div>
-      <div class="buddy-progress-row">
-        <span class="buddy-progress-txt">${p.nickname.substring(0,10)}</span>
-        <div class="buddy-progress-bar"><div class="buddy-progress-fill" style="width:${Math.min(partnerPct,100)}%"></div></div>
-        <span class="buddy-progress-txt">${partnerDoneToday}/${totalHabits}</span>
-      </div>
-      <div class="buddy-progress-row">
-        <span class="buddy-progress-txt">${myNick.substring(0,10)}</span>
-        <div class="buddy-progress-bar"><div class="buddy-progress-fill" style="width:${Math.min(myPct,100)}%;background:var(--gold)"></div></div>
-        <span class="buddy-progress-txt">${myDoneToday}/${totalHabits}</span>
-      </div>
-      <div class="buddy-combo-row">
-        <div>
-          <div class="buddy-combo-num">🔥 ${myBuddy.combo_streak || 0} dní</div>
-          <div class="buddy-combo-label">Společné combo</div>
-        </div>
-        <button class="buddy-manage-btn" onclick="showPage('friends')">Spravovat →</button>
-      </div>
-    </div>`;
-  });
-}
-
-function renderBuddySection() {
-  const section = document.getElementById('buddy-section');
-  if (!section) return;
-  if (!currentUser || currentUser.email === 'host@preview.cz') { section.style.display = 'none'; return; }
-  section.style.display = 'block';
-
-  if (!myBuddy) {
-    section.innerHTML = `<div class="buddy-card" style="text-align:center;padding:20px">
-      <div style="font-size:1.6rem;margin-bottom:6px">👥</div>
-      <div style="font-weight:700;margin-bottom:4px">Najdi si Buddy</div>
-      <div style="font-size:0.8rem;color:var(--text-muted);margin-bottom:12px">Spáruj se s přítelem — oba ztratíte combo, pokud někdo vynechá den.</div>
-      <div style="font-size:0.75rem;color:var(--text-muted)">👆 Pošli žádost kliknutím na "Vyzvat jako Buddy" u přítele níže</div>
-    </div>`;
-    return;
-  }
-
-  if (myBuddy.status === 'pending') {
-    const uid = currentUser.id;
-    const iAmRequester = myBuddy.requester_id === uid;
-    if (iAmRequester) {
-      section.innerHTML = `<div class="buddy-req-card">
-        <span style="font-size:1.4rem">👥</span>
-        <div style="flex:1"><div style="font-weight:600;font-size:0.9rem">Žádost o Buddy odeslána</div><div style="font-size:0.78rem;color:var(--text-muted)">Čekáme na přijetí…</div></div>
-        <button class="btn-buddy-dissolve" onclick="dissolveBuddy()">Zrušit</button>
-      </div>`;
-    } else {
-      supa.from('profiles').select('nickname').eq('id', myBuddy.requester_id).maybeSingle().then(({ data: p }) => {
-        const name = p?.nickname || 'Uživatel';
-        section.innerHTML = `<div class="buddy-req-card">
-          <span style="font-size:1.4rem">👥</span>
-          <div style="flex:1"><div style="font-weight:600;font-size:0.9rem">${name} tě vyzývá jako Buddy!</div><div style="font-size:0.78rem;color:var(--text-muted)">Combo = oba musí splnit den</div></div>
-          <button class="btn-buddy-req" onclick="respondBuddy('accepted')">Přijmout</button>
-          <button class="btn-buddy-dissolve" onclick="respondBuddy('rejected')">✕</button>
-        </div>`;
-      });
-    }
-    return;
-  }
-
-  if (myBuddy.status === 'accepted') {
-    const uid = currentUser.id;
-    const partnerId = myBuddy.requester_id === uid ? myBuddy.receiver_id : myBuddy.requester_id;
-    supa.from('profiles').select('nickname,avatar,today_habits_done,today_date').eq('id', partnerId).maybeSingle().then(({ data: p }) => {
-      if (!p) return;
-      const totalHabits = habits.length || 1;
-      const todayStr = new Date().toDateString();
-      const partnerDoneToday = p.today_date === todayStr ? (p.today_habits_done || 0) : 0;
-      const myDoneToday = (habitLog[todayStr] || []).length;
-      const myNick = currentUser.user_metadata?.nickname || currentUser.email.split('@')[0];
-      const partnerPct = Math.round(partnerDoneToday / totalHabits * 100);
-      const myPct = Math.round(myDoneToday / totalHabits * 100);
-      const partnerDone = partnerPct >= 100;
-      const statusCls = partnerDone ? 'buddy-status-done' : 'buddy-status-active';
-      const statusTxt = partnerDone ? '✅ Hotovo' : '⏳ V průběhu';
-
-      section.innerHTML = `<div class="buddy-card">
-        <div class="buddy-card-header">
-          <div>
-            <div class="buddy-label">👥 Váš Buddy</div>
-            <div class="buddy-name">${p.nickname}</div>
-          </div>
-          <span class="buddy-status-badge ${statusCls}">${statusTxt}</span>
-        </div>
-        <div class="buddy-progress-row">
-          <span class="buddy-progress-txt">${p.nickname.substring(0,10)}</span>
-          <div class="buddy-progress-bar"><div class="buddy-progress-fill" style="width:${Math.min(partnerPct,100)}%"></div></div>
-          <span class="buddy-progress-txt">${partnerDoneToday}/${totalHabits}</span>
-        </div>
-        <div class="buddy-progress-row">
-          <span class="buddy-progress-txt">${myNick.substring(0,10)}</span>
-          <div class="buddy-progress-bar"><div class="buddy-progress-fill" style="width:${Math.min(myPct,100)}%;background:var(--gold)"></div></div>
-          <span class="buddy-progress-txt">${myDoneToday}/${totalHabits}</span>
-        </div>
-        <div class="buddy-combo-row">
-          <div>
-            <div class="buddy-combo-num">🔥 ${myBuddy.combo_streak || 0} dní</div>
-            <div class="buddy-combo-label">Společné combo</div>
-          </div>
-          <button class="btn-buddy-dissolve" onclick="dissolveBuddy()">Rozpustit Buddy</button>
-        </div>
-      </div>`;
-    });
-    return;
-  }
-}
-
-async function checkBuddyCombo() {
-  if (!myBuddy || myBuddy.status !== 'accepted' || !currentUser) return;
-  const uid = currentUser.id;
-  const partnerId = myBuddy.requester_id === uid ? myBuddy.receiver_id : myBuddy.requester_id;
-  const todayStr = new Date().toDateString();
-  const myDone = (habitLog[todayStr] || []).length >= habits.length && habits.length > 0;
-  if (!myDone) return; // Já jsem ještě nesplnil/a
-
-  // Zkontroluj jestli partner splnil dnes
-  const { data: partnerProfile } = await supa.from('profiles')
-    .select('today_habits_done,today_date')
-    .eq('id', partnerId).maybeSingle();
-
-  const partnerDone = partnerProfile?.today_date === todayStr &&
-    partnerProfile?.today_habits_done >= habits.length;
-
-  if (!partnerDone) return; // Partner ještě nesplnil
-
-  // Oba splnili! Zkontroluj jestli combo_last_date je yesterday
-  const yesterday = new Date(Date.now() - 86400000).toDateString();
-  const comboLastDate = myBuddy.combo_last_date || '';
-  const newCombo = comboLastDate === yesterday ? (myBuddy.combo_streak || 0) + 1 : 1;
-
-  const { error } = await supa.from('buddies')
-    .update({ combo_streak: newCombo, combo_last_date: todayStr })
-    .eq('id', myBuddy.id);
-
-  if (!error) {
-    myBuddy.combo_streak = newCombo;
-    myBuddy.combo_last_date = todayStr;
-    if (newCombo > 1) {
-      showComboPopup('👥', `BUDDY COMBO ×${newCombo}!`, `Oba splnili ${newCombo} dní v řadě 🔥`);
-    } else {
-      showToast('👥 Buddy combo spuštěno! Splňte dnes oba!');
-    }
-    renderBuddyCard();
-  }
-}
-
-async function sendBuddyRequest(receiverId, nickname) {
-  if (!currentUser) { showToast('Přihlas se nejdříve'); return; }
-  if (myBuddy) { showToast('Již máš Buddyho — nejdříve ho rozpusť'); return; }
-
-  const { error } = await supa.from('buddies').insert({
-    requester_id: currentUser.id,
-    receiver_id: receiverId,
-    status: 'pending',
-    combo_streak: 0,
-    combo_last_date: ''
-  });
-
-  if (error) { showToast('Chyba při odesílání žádosti'); return; }
-  showToast(`👥 Žádost o Buddy odeslána ${nickname}!`);
-  await loadBuddy();
-  renderBuddySection();
-}
-
-async function respondBuddy(status) {
-  if (!myBuddy) return;
-  const { error } = await supa.from('buddies').update({ status }).eq('id', myBuddy.id);
-  if (error) { showToast('Chyba'); return; }
-  if (status === 'accepted') {
-    showToast('👥 Buddy přijat! Začínáte combo!');
-  } else {
-    showToast('Žádost odmítnuta');
-  }
-  await loadBuddy();
-  renderBuddySection();
-  renderBuddyCard();
-}
-
-async function dissolveBuddy() {
-  if (!myBuddy) return;
-  if (!confirm('Opravdu chceš rozpustit Buddy partnerství?')) return;
-  const { error } = await supa.from('buddies').delete().eq('id', myBuddy.id);
-  if (error) { showToast('Chyba'); return; }
-  myBuddy = null;
-  showToast('Buddy partnerství ukončeno');
-  renderBuddySection();
-  renderBuddyCard();
 }
 
 // ════════════════════════════════════════════
@@ -8273,17 +7993,15 @@ function showPage(id) {
       const waitAndRender = () => {
         if (_cloudLoading) { setTimeout(waitAndRender, 200); return; }
         renderHabits();
-        renderBuddyCard();
       };
       waitAndRender();
     } else {
       renderHabits();
-      renderBuddyCard();
     }
   }
   if(id==='challenges') { loadChallengeRatingsForCards(); renderDailyChallenges(); renderBossFight(); renderCommunityChallenge(); loadChallengeVoting(); }
   if(id==='allhabits') { loadHabitFavs(); }
-  if(id==='friends') { syncProfileToSupabase(); loadFriends(); loadTeamSection(); loadBuddy(); }
+  if(id==='friends') { syncProfileToSupabase(); loadFriends(); loadTeamSection(); }
   if(id==='progress') { loadProgress(); }
   if(id==='settings' && isLoggedIn()) {
     loadUserSettings().then(() => {
@@ -9359,8 +9077,6 @@ function toggleHabit(hid) {
     // check perfect day streak
     checkHabitStreak();
     showToast('✅ Návyk splněn!');
-    // check buddy combo
-    setTimeout(() => checkBuddyCombo(), 500);
   } else {
     habitLog[todayStr].splice(idx,1);
   }
