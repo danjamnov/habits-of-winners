@@ -1035,6 +1035,70 @@ nav {
 .friend-badges { display: flex; gap: 4px; flex-wrap: wrap; margin-top: 8px; }
 .fbadge { font-size: 1rem; }
 
+/* ── BUDDY CARD ── */
+.buddy-card {
+  background: linear-gradient(135deg, rgba(99,102,241,0.08), rgba(251,191,36,0.06));
+  border: 1.5px solid rgba(99,102,241,0.35);
+  border-radius: 18px; padding: 16px 18px;
+  margin-bottom: 14px; position: relative;
+}
+.buddy-card-header {
+  display: flex; align-items: center; gap: 10px; margin-bottom: 12px;
+}
+.buddy-label {
+  font-size: 0.68rem; font-weight: 700; letter-spacing: 1px;
+  color: #818cf8; text-transform: uppercase; margin-bottom: 2px;
+}
+.buddy-name { font-size: 1rem; font-weight: 700; color: var(--text); }
+.buddy-status-badge {
+  margin-left: auto; font-size: 0.72rem; font-weight: 600;
+  padding: 3px 10px; border-radius: 100px;
+}
+.buddy-status-done   { background: rgba(74,222,128,0.15); color: #4ade80; border: 1px solid rgba(74,222,128,0.3); }
+.buddy-status-active { background: rgba(251,191,36,0.12); color: var(--gold); border: 1px solid var(--gold-dim); }
+.buddy-status-miss   { background: rgba(248,113,113,0.12); color: #f87171; border: 1px solid rgba(248,113,113,0.3); }
+.buddy-progress-row  { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+.buddy-progress-bar  { flex: 1; height: 6px; background: var(--border); border-radius: 100px; overflow: hidden; }
+.buddy-progress-fill { height: 100%; border-radius: 100px; background: #818cf8; transition: width 0.5s ease; }
+.buddy-progress-txt  { font-size: 0.78rem; color: var(--text-muted); white-space: nowrap; }
+.buddy-combo-row     { display: flex; align-items: center; justify-content: space-between; }
+.buddy-combo-num     { font-size: 0.82rem; color: var(--gold); font-weight: 700; }
+.buddy-combo-label   { font-size: 0.72rem; color: var(--text-muted); }
+.buddy-manage-btn    {
+  font-size: 0.72rem; color: #818cf8; background: none; border: none;
+  cursor: pointer; padding: 0; font-family: Outfit, sans-serif;
+  text-decoration: underline; text-underline-offset: 2px;
+}
+
+/* Buddy section in friends page */
+.buddy-section { margin-bottom: 20px; }
+.buddy-req-card {
+  background: var(--surface2); border: 1.5px solid rgba(99,102,241,0.3);
+  border-radius: 14px; padding: 14px 16px;
+  display: flex; align-items: center; gap: 12px;
+}
+.btn-buddy-req {
+  padding: 6px 16px; border-radius: 100px; font-size: 0.8rem;
+  font-weight: 600; cursor: pointer; border: none; font-family: Outfit, sans-serif;
+  background: #818cf8; color: #fff; transition: opacity 0.2s;
+}
+.btn-buddy-req:hover { opacity: 0.85; }
+.btn-buddy-dissolve {
+  padding: 5px 14px; border-radius: 100px; font-size: 0.75rem;
+  font-weight: 600; cursor: pointer; font-family: Outfit, sans-serif;
+  background: transparent; border: 1px solid var(--border);
+  color: var(--text-muted); transition: all 0.2s;
+}
+.btn-buddy-dissolve:hover { border-color: #f87171; color: #f87171; }
+.btn-send-buddy {
+  margin-top: 8px; padding: 6px 16px; border-radius: 100px;
+  font-size: 0.78rem; font-weight: 600; cursor: pointer;
+  border: 1.5px solid rgba(99,102,241,0.5); color: #818cf8;
+  background: transparent; font-family: Outfit, sans-serif; transition: all 0.2s;
+  display: block; width: 100%;
+}
+.btn-send-buddy:hover { background: rgba(99,102,241,0.12); }
+
 .empty-state { text-align: center; padding: 36px 20px; color: var(--text-muted); font-size: 0.88rem; line-height: 1.6; }
 .empty-state .es-icon { font-size: 2.2rem; margin-bottom: 8px; }
 
@@ -3298,6 +3362,7 @@ html.logged-in .hero-v2 { display: none; }
 
         <div class="habits-layout">
       <div>
+        <div id="buddy-card-wrap"></div>
         <div class="habit-list" id="habit-list"></div>
       </div>
 
@@ -3598,6 +3663,9 @@ html.logged-in .hero-v2 { display: none; }
     </div>
 
     <div class="friends-layout">
+
+      <!-- ══ BUDDY SEKCE ══ -->
+      <div class="buddy-section" id="buddy-section" style="display:none"></div>
 
       <!-- Žádosti o přátelství -->
       <div class="requests-section" id="requests-section" style="display:none">
@@ -5421,6 +5489,9 @@ async function loadUserData() {
     // Cloud data načtena - překresli vše
     renderHabits(); renderDailyChallenges(); updateSettingsMenu();
   }
+
+  // 4. Načti buddy
+  loadBuddy();
 }
 
 function loadUserDataFromLocalStorage() {
@@ -6603,6 +6674,9 @@ async function syncProfileToSupabase() {
     if (val !== null) settings[key] = val; // přepiš jen pokud je v localStorage
   }
 
+  const todayStr = new Date().toDateString();
+  const todayDone = (habitLog[todayStr] || []).length;
+
   await supa.from('profiles').upsert({
     id: currentUser.id,
     nickname,
@@ -6613,6 +6687,8 @@ async function syncProfileToSupabase() {
     last_challenge: lastChallenge,
     badges: unlockedBadges,
     avatar: avatarData !== null ? avatarData : (currentSettings._avatar || null),
+    today_habits_done: todayDone,
+    today_date: todayStr,
     settings,
     updated_at: new Date().toISOString()
   }, { onConflict: 'id' });
@@ -6824,6 +6900,9 @@ async function loadFriends() {
   }).join('') + `</div>`;
 
   // ── Karty přátel ──────────────────────────────────────────────────────────
+  // Render buddy section
+  renderBuddySection();
+
   friendList.innerHTML = profiles.map(p => {
     const myS = streak||0, theirS = p.streak||0;
     const total = Math.max(myS + theirS, 1);
@@ -6831,6 +6910,15 @@ async function loadFriends() {
     const theirPct = 100 - myPct;
     const indicator = theirS > myS ? '🏃' : theirS === myS && theirS > 0 ? '🤝' : myS > 0 ? '😤' : '';
     const badgesHtml = (p.badges||[]).slice(0,5).map(b=>`<span class="fbadge">${b}</span>`).join('');
+
+    // Buddy button — zobraz jen pokud ještě není aktivní buddy
+    const isBuddy = myBuddy?.partnerId === p.id;
+    const hasBuddy = !!myBuddy;
+    const buddyBtn = isBuddy
+      ? `<div style="font-size:0.75rem;color:#818cf8;text-align:center;margin-top:8px;font-weight:600">👥 Toto je tvůj Buddy</div>`
+      : !hasBuddy
+        ? `<button class="btn-send-buddy" onclick="sendBuddyRequest('${p.id}','${p.nickname}')">👥 Vyzvat jako Buddy</button>`
+        : '';
 
     return `<div class="friend-card">
       <div class="friend-card-top">
@@ -6861,6 +6949,7 @@ async function loadFriends() {
       </div>
       ${badgesHtml ? `<div class="friend-badges">${badgesHtml}</div>` : ''}
       ${p.last_challenge ? `<div style="margin-top:8px;font-size:0.75rem;color:var(--text-muted)">💪 ${'Poslední'}: <span style="color:var(--text)">${p.last_challenge}</span></div>` : ''}
+      ${buddyBtn}
     </div>`;
   }).join('');
 }
@@ -6878,6 +6967,324 @@ async function respondFriendship(friendshipId, status, nickname) {
     showToast(`Žádost od ${nickname} odmítnuta`);
   }
   loadFriends();
+}
+
+// ════════════════════════════════════════════
+//  BUDDY SYSTEM
+// ════════════════════════════════════════════
+let myBuddy = null; // { buddyId, partnerId, partnerNickname, partnerAvatar, comboStreak, comboLastDate, status }
+
+async function loadBuddy() {
+  if (!isLoggedIn()) return;
+  try {
+    const { data: rows } = await supa.from('buddies')
+      .select('*')
+      .or(`requester_id.eq.${currentUser.id},receiver_id.eq.${currentUser.id}`)
+      .in('status', ['pending', 'accepted'])
+      .order('created_at', { ascending: false })
+      .limit(1);
+
+    if (!rows || rows.length === 0) { myBuddy = null; renderBuddyCard(); return; }
+
+    const row = rows[0];
+    const partnerId = row.requester_id === currentUser.id ? row.receiver_id : row.requester_id;
+    const isRequester = row.requester_id === currentUser.id;
+
+    // Load partner's profile
+    const { data: partnerProfile } = await supa.from('profiles')
+      .select('nickname, avatar, habit_streak, today_habits_done, today_date, habits')
+      .eq('id', partnerId)
+      .single();
+
+    // Load partner's user_data to get total habits count
+    const { data: partnerData } = await supa.from('user_data')
+      .select('habits')
+      .eq('id', partnerId)
+      .single();
+
+    const todayStr = new Date().toDateString();
+    const partnerDoneToday = (partnerProfile?.today_date === todayStr)
+      ? (partnerProfile?.today_habits_done || 0) : 0;
+    const partnerTotalHabits = (partnerData?.habits || []).length;
+
+    myBuddy = {
+      buddyId: row.id,
+      partnerId,
+      partnerNickname: partnerProfile?.nickname || 'Buddy',
+      partnerAvatar: partnerProfile?.avatar || null,
+      partnerHabitStreak: partnerProfile?.habit_streak || 0,
+      partnerDoneToday,
+      partnerTotalHabits,
+      comboStreak: row.combo_streak || 0,
+      comboLastDate: row.combo_last_date || '',
+      status: row.status,
+      isRequester,
+    };
+
+    renderBuddyCard();
+    if (row.status === 'accepted') checkBuddyCombo();
+  } catch(e) {
+    console.warn('loadBuddy error:', e.message);
+  }
+}
+
+function renderBuddyCard() {
+  const wrap = document.getElementById('buddy-card-wrap');
+  if (!wrap) return;
+
+  if (!myBuddy || !isLoggedIn()) { wrap.innerHTML = ''; return; }
+
+  if (myBuddy.status === 'pending') {
+    if (!myBuddy.isRequester) {
+      // Příjemce — zobraz výzvu k přijetí
+      wrap.innerHTML = `<div class="buddy-card">
+        <div class="buddy-card-header">
+          ${avatarHtml(myBuddy.partnerAvatar, myBuddy.partnerNickname, 40)}
+          <div>
+            <div class="buddy-label">Buddy žádost</div>
+            <div class="buddy-name">${myBuddy.partnerNickname} tě chce jako Buddy</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:8px">
+          <button class="btn-buddy-req" onclick="respondBuddy('${myBuddy.buddyId}','accepted')">✓ Přijmout</button>
+          <button class="btn-buddy-dissolve" onclick="respondBuddy('${myBuddy.buddyId}','rejected')">Odmítnout</button>
+        </div>
+      </div>`;
+    } else {
+      wrap.innerHTML = `<div class="buddy-card" style="opacity:0.7">
+        <div class="buddy-card-header">
+          ${avatarHtml(myBuddy.partnerAvatar, myBuddy.partnerNickname, 40)}
+          <div>
+            <div class="buddy-label">👥 Buddy</div>
+            <div class="buddy-name">${myBuddy.partnerNickname}</div>
+          </div>
+          <span class="buddy-status-badge buddy-status-active" style="margin-left:auto">⏳ Čeká</span>
+        </div>
+        <div style="font-size:0.78rem;color:var(--text-muted)">Žádost odeslána — čekáme na přijetí.</div>
+      </div>`;
+    }
+    return;
+  }
+
+  // Accepted buddy
+  const todayStr = new Date().toDateString();
+  const myDoneToday = (habitLog[todayStr] || []).length;
+  const myTotal = habits.length;
+  const partnerDone = myBuddy.partnerDoneToday;
+  const partnerTotal = myBuddy.partnerTotalHabits;
+
+  // Status
+  let statusBadge, statusCls;
+  if (partnerDone >= partnerTotal && partnerTotal > 0) {
+    statusBadge = '✅ Splnil/a dnes'; statusCls = 'buddy-status-done';
+  } else if (partnerDone > 0) {
+    statusBadge = `⚡ ${partnerDone}/${partnerTotal} návyků`; statusCls = 'buddy-status-active';
+  } else {
+    const isToday = myBuddy.comboLastDate === todayStr;
+    statusBadge = isToday ? '⏳ Ještě nezačal/a' : '😴 Bez návyků'; statusCls = 'buddy-status-miss';
+  }
+
+  // Progress bar
+  const pct = partnerTotal > 0 ? Math.round(partnerDone / partnerTotal * 100) : 0;
+
+  // Combo streak
+  const combo = myBuddy.comboStreak;
+  const comboColor = combo >= 7 ? 'var(--gold)' : combo >= 3 ? '#818cf8' : 'var(--text-muted)';
+
+  wrap.innerHTML = `<div class="buddy-card">
+    <div class="buddy-card-header">
+      ${avatarHtml(myBuddy.partnerAvatar, myBuddy.partnerNickname, 42)}
+      <div style="flex:1">
+        <div class="buddy-label">👥 Tvůj Buddy</div>
+        <div class="buddy-name">${myBuddy.partnerNickname}</div>
+      </div>
+      <span class="buddy-status-badge ${statusCls}">${statusBadge}</span>
+    </div>
+    <div class="buddy-progress-row">
+      <div class="buddy-progress-bar">
+        <div class="buddy-progress-fill" style="width:${pct}%"></div>
+      </div>
+      <span class="buddy-progress-txt">${partnerDone}/${partnerTotal > 0 ? partnerTotal : '?'}</span>
+    </div>
+    <div class="buddy-combo-row">
+      <div>
+        <span class="buddy-combo-num" style="color:${comboColor}">🔥 ${combo}</span>
+        <span class="buddy-combo-label"> ${pluralCS(combo,'den','dny','dní')} buddy combo</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:12px">
+        <span style="font-size:0.72rem;color:var(--text-muted)">Jejich streak: ${myBuddy.partnerHabitStreak}🔥</span>
+        <button class="buddy-manage-btn" onclick="showPage('friends')">spravovat →</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+async function checkBuddyCombo() {
+  if (!myBuddy || myBuddy.status !== 'accepted') return;
+  const todayStr = new Date().toDateString();
+  const yesterday = new Date(Date.now() - 86400000).toDateString();
+
+  // Pokud jsme combo dnes už aktualizovali, skip
+  if (myBuddy.comboLastDate === todayStr) return;
+
+  const myDoneToday = (habitLog[todayStr] || []).length;
+  const partnerDoneToday = myBuddy.partnerDoneToday;
+
+  if (myDoneToday === 0 || partnerDoneToday === 0) {
+    // Jeden ještě nezačal — možná dnes ještě splní, neresetujeme
+    return;
+  }
+
+  // Oba splnili dnes — aktualizuj combo
+  const wasYesterday = myBuddy.comboLastDate === yesterday;
+  const newStreak = wasYesterday ? myBuddy.comboStreak + 1 : 1;
+
+  try {
+    await supa.from('buddies')
+      .update({ combo_streak: newStreak, combo_last_date: todayStr })
+      .eq('id', myBuddy.buddyId);
+
+    myBuddy.comboStreak = newStreak;
+    myBuddy.comboLastDate = todayStr;
+    renderBuddyCard();
+
+    if (newStreak > 1) {
+      showToast(`🔥 Buddy combo: ${newStreak} dní v řadě!`);
+    }
+  } catch(e) { console.warn('checkBuddyCombo error:', e.message); }
+}
+
+async function sendBuddyRequest(receiverId, nickname) {
+  if (!isLoggedIn()) { showToast('Nejprve se přihlas'); return; }
+  if (myBuddy) {
+    showToast('Už máš aktivního Buddy. Nejprve ho ukonči.'); return;
+  }
+  try {
+    // Check receiver doesn't already have an active buddy
+    const { data: existing } = await supa.from('buddies')
+      .select('id')
+      .or(`requester_id.eq.${receiverId},receiver_id.eq.${receiverId}`)
+      .in('status', ['pending', 'accepted'])
+      .limit(1);
+
+    if (existing && existing.length > 0) {
+      showToast(`${nickname} už má Buddy nebo čekající žádost.`); return;
+    }
+
+    const { error } = await supa.from('buddies').insert([{
+      requester_id: currentUser.id,
+      receiver_id: receiverId
+    }]);
+
+    if (error) throw error;
+    showToast(`🤝 Buddy žádost odeslána ${nickname}!`);
+    loadBuddy();
+    loadFriends();
+  } catch(e) {
+    showToast('Chyba: ' + e.message);
+  }
+}
+
+async function respondBuddy(buddyId, status) {
+  try {
+    const { error } = await supa.from('buddies')
+      .update({ status })
+      .eq('id', buddyId);
+    if (error) throw error;
+
+    if (status === 'accepted') {
+      showToast('🤝 Buddy přijat! Uvidíte navzájem svůj denní progress.');
+    } else {
+      showToast('Buddy žádost odmítnuta.');
+    }
+    await loadBuddy();
+    if (document.getElementById('page-friends')?.classList.contains('active')) loadFriends();
+  } catch(e) {
+    showToast('Chyba: ' + e.message);
+  }
+}
+
+async function dissolveBuddy() {
+  if (!myBuddy) return;
+  if (!confirm('Opravdu chceš ukončit Buddy vztah? Ztratíte combo streak.')) return;
+  try {
+    await supa.from('buddies').delete().eq('id', myBuddy.buddyId);
+    myBuddy = null;
+    renderBuddyCard();
+    showToast('Buddy vztah ukončen.');
+    if (document.getElementById('page-friends')?.classList.contains('active')) loadFriends();
+  } catch(e) { showToast('Chyba: ' + e.message); }
+}
+
+function renderBuddySection() {
+  const section = document.getElementById('buddy-section');
+  if (!section) return;
+
+  if (!isLoggedIn()) { section.style.display = 'none'; return; }
+  section.style.display = 'block';
+
+  if (!myBuddy) {
+    section.innerHTML = `<div style="background:var(--surface2);border:1.5px dashed rgba(99,102,241,0.35);border-radius:16px;padding:18px 20px;margin-bottom:4px">
+      <div style="font-size:0.72rem;font-weight:700;letter-spacing:1px;color:#818cf8;margin-bottom:6px">👥 BUDDY</div>
+      <div style="font-weight:600;margin-bottom:4px">Ještě nemáš Buddy</div>
+      <div style="font-size:0.8rem;color:var(--text-muted);line-height:1.5">Vyber kamaráda níže a pošli mu Buddy žádost — uvidíte navzájem denní progress a budujete společné combo.</div>
+    </div>`;
+    return;
+  }
+
+  if (myBuddy.status === 'pending') {
+    if (!myBuddy.isRequester) {
+      section.innerHTML = `<div class="buddy-req-card">
+        ${avatarHtml(myBuddy.partnerAvatar, myBuddy.partnerNickname, 44)}
+        <div style="flex:1">
+          <div class="buddy-label">👥 Buddy žádost</div>
+          <div style="font-weight:600">${myBuddy.partnerNickname} tě chce jako Buddy</div>
+        </div>
+        <div style="display:flex;gap:8px;flex-shrink:0">
+          <button class="btn-buddy-req" onclick="respondBuddy('${myBuddy.buddyId}','accepted')">✓ Přijmout</button>
+          <button class="btn-buddy-dissolve" onclick="respondBuddy('${myBuddy.buddyId}','rejected')">✕</button>
+        </div>
+      </div>`;
+    } else {
+      section.innerHTML = `<div class="buddy-req-card">
+        ${avatarHtml(myBuddy.partnerAvatar, myBuddy.partnerNickname, 44)}
+        <div style="flex:1">
+          <div class="buddy-label">👥 Buddy</div>
+          <div style="font-weight:600">${myBuddy.partnerNickname}</div>
+          <div style="font-size:0.75rem;color:var(--text-muted)">Čeká na přijetí…</div>
+        </div>
+        <button class="btn-buddy-dissolve" onclick="dissolveBuddy()">Zrušit</button>
+      </div>`;
+    }
+    return;
+  }
+
+  // Active buddy
+  const todayStr = new Date().toDateString();
+  const partnerDone = myBuddy.partnerDoneToday;
+  const partnerTotal = myBuddy.partnerTotalHabits;
+  const pct = partnerTotal > 0 ? Math.round(partnerDone / partnerTotal * 100) : 0;
+
+  section.innerHTML = `<div class="buddy-card" style="margin-bottom:4px">
+    <div class="buddy-card-header">
+      ${avatarHtml(myBuddy.partnerAvatar, myBuddy.partnerNickname, 44)}
+      <div style="flex:1">
+        <div class="buddy-label">👥 Tvůj Buddy</div>
+        <div class="buddy-name">${myBuddy.partnerNickname}</div>
+      </div>
+      <button class="btn-buddy-dissolve" onclick="dissolveBuddy()">Ukončit</button>
+    </div>
+    <div class="buddy-progress-row">
+      <div class="buddy-progress-bar">
+        <div class="buddy-progress-fill" style="width:${pct}%"></div>
+      </div>
+      <span class="buddy-progress-txt">${partnerDone}/${partnerTotal || '?'} dnes</span>
+    </div>
+    <div class="buddy-combo-row">
+      <span class="buddy-combo-num">🔥 ${myBuddy.comboStreak} dní</span>
+      <span class="buddy-combo-label">Buddy combo streak</span>
+    </div>
+  </div>`;
 }
 
 // ════════════════════════════════════════════
@@ -8069,7 +8476,8 @@ function showPage(id) {
   }
   if(id==='challenges') { loadChallengeRatingsForCards(); renderDailyChallenges(); renderBossFight(); renderCommunityChallenge(); loadChallengeVoting(); }
   if(id==='allhabits') { loadHabitFavs(); }
-  if(id==='friends') { syncProfileToSupabase(); loadFriends(); loadTeamSection(); }
+  if(id==='friends') { syncProfileToSupabase(); loadFriends(); loadTeamSection(); loadBuddy(); }
+  if(id==='habits') { loadBuddy(); }
   if(id==='progress') { loadProgress(); }
   if(id==='settings' && isLoggedIn()) {
     loadUserSettings().then(() => {
@@ -9197,6 +9605,10 @@ function toggleHabit(hid) {
   renderActivityRings();
   renderSeasonCard();
   scheduleSyncToCloud();
+  // Buddy combo check — async, non-blocking
+  if (myBuddy?.status === 'accepted') {
+    setTimeout(() => checkBuddyCombo(), 500);
+  }
 }
 
 function showComboPopup(emoji, title, sub) {
@@ -9506,76 +9918,4 @@ async function runDiagnostics() {
         .single();
       if (error) {
         lines.push('❌ READ ERROR: ' + error.message + ' (code: ' + error.code + ')');
-      } else if (!data) {
-        lines.push('❌ Žádný záznam v user_data pro tohoto uživatele');
-      } else {
-        lines.push('✅ user_data nalezena');
-        lines.push('habits v DB: ' + 'data.habits ? data.habits.length : 0');
-        lines.push('updated_at: ' + data.updated_at);
       }
-    } catch(e) {
-      lines.push('❌ EXCEPTION: ' + e.message);
-    }
-    
-    lines.push('Testuji zápis...');
-    try {
-      const { error: we } = await supa.from('user_data').upsert({
-        id: currentUser.id,
-        habits: habits,
-        completed: completed,
-        streak: streak,
-        last_date: lastDate,
-        habit_log: habitLog,
-        habit_streak: habitStreak,
-        updated_at: new Date().toISOString()
-      }, { onConflict: 'id' });
-      if (we) lines.push('❌ WRITE ERROR: ' + we.message + ' (code: ' + we.code + ')');
-      else lines.push('✅ Zápis OK');
-    } catch(e) {
-      lines.push('❌ WRITE EXCEPTION: ' + e.message);
-    }
-  }
-  
-  alert(lines.join('\n'));
-}
-
-</script>
-
-<!-- ══ MODAL: Celá sbírka karet ══ -->
-<div class="cards-modal-overlay" id="cards-modal" style="display:none" onclick="if(event.target===this)closeCardsModal()">
-  <div class="cards-modal-inner">
-    <div class="cards-modal-header">
-      <div class="cards-modal-title">🃏 Sběratelské karty<span class="cards-modal-count" id="cards-modal-count">0 / 0</span></div>
-      <button class="cards-modal-close" onclick="closeCardsModal()">✕</button>
-    </div>
-    <div class="cards-modal-filters" id="cards-modal-filters"></div>
-    <div class="cards-modal-grid" id="cards-modal-grid"></div>
-  </div>
-</div>
-<!-- ══ MODAL: Detail karty ══ -->
-<div class="card-detail-overlay" id="card-detail-modal" style="display:none" onclick="if(event.target===this)closeCardDetail()">
-  <div class="card-detail-inner">
-    <div id="card-detail-card"></div>
-    <div class="card-detail-stat" id="card-detail-stat"></div>
-    <div class="card-detail-btns">
-      <button class="card-detail-btn share" onclick="shareCurrentCard()">📤 Sdílet kartu</button>
-      <button class="card-detail-btn close-btn" onclick="closeCardDetail()">Zavřít</button>
-    </div>
-  </div>
-</div>
-<script>
-// ═══════════════════════════════
-//  PWA – Manifest (inline)
-// ═══════════════════════════════
-(function() {
-  const manifest = {
-    name: "Habits of Winners",
-    short_name: "HoW",
-    description: "500 výzev, návyky a tracker pro každodenní zlepšování.",
-    start_url: "/",
-    display: "standalone",
-    background_color: "#1a1a2e",
-    theme_color: "#C9A96E",
-    orientation: "portrait",
-    icons: [
-      { src: "data:image/png;base64,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
